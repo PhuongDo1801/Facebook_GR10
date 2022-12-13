@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -6,10 +8,12 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 
 export default function Login() {
+  const [visible, setVisible] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -22,13 +26,32 @@ export default function Login() {
             placeholder="Số Điện Thoại"
             keyboardType="numeric"
           />
-          <TextInput
-            autoCapitalize="none"
-            autoComplete="password"
-            secureTextEntry={true}
-            placeholder="Mật khẩu"
-            style={styles.input}
-          />
+          <View style={styles.inputPass}>
+            <TextInput
+              autoCapitalize="none"
+              autoComplete="password"
+              secureTextEntry={visible === false ? true : false}
+              placeholder="Mật khẩu"
+              style={styles.input}
+            />
+            {visible ? (
+              <FontAwesome
+                name="eye"
+                size={24}
+                color="black"
+                style={styles.iconEye}
+                onPress={() => setVisible(!visible)}
+              />
+            ) : (
+              <FontAwesome
+                name="eye-slash"
+                size={24}
+                color="black"
+                style={styles.iconEye}
+                onPress={() => setVisible(!visible)}
+              />
+            )}
+          </View>
         </View>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.textButton}>Đăng Nhập</Text>
@@ -39,7 +62,10 @@ export default function Login() {
           <View style={styles.itemSeperate}></View>
         </View>
       </View>
-      <TouchableOpacity style={styles.footer}>
+      <TouchableOpacity
+        style={styles.footer}
+        // onPress={() => navigation.navigate("Register")}
+      >
         <Text style={styles.textFooter}>Tạo tài khoản Facebook mới</Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
@@ -47,23 +73,43 @@ export default function Login() {
   );
 }
 
+const screenHeight =
+  Math.round(Dimensions.get("window").height) > 700
+    ? 700
+    : Math.round(Dimensions.get("window").height);
+const marginx =
+  Math.round(Dimensions.get("window").height) > 700
+    ? (Math.round(Dimensions.get("window").height) - 700) / 2
+    : 0;
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#fff",
+    flex: 1,
+    paddingTop: marginx,
   },
   header: {
+    height: screenHeight * 0.3,
     justifyContent: "center",
-    paddingVertical: "20%",
   },
   body: {
     width: "80%",
+    height: screenHeight * 0.4,
   },
   input: {
     height: 50,
     fontSize: 20,
     borderBottomWidth: 1,
     marginBottom: 15,
+  },
+  inputPass: {
+    position: "relative",
+    justifyContent: "center",
+  },
+  iconEye: {
+    position: "absolute",
+    right: 0,
+    top: 12,
   },
   button: {
     marginVertical: 25,
@@ -80,7 +126,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 20,
   },
   itemSeperate: {
     backgroundColor: "#000",
@@ -91,7 +136,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#42B72A",
     padding: 10,
     borderRadius: 10,
-    marginVertical: 10,
   },
   textFooter: {
     fontSize: 15,
