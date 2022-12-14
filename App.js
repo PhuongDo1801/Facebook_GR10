@@ -1,12 +1,15 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, SafeAreaView, Text, View } from "react-native";
+import FriendItem from "./components/FriendItem";
+import Friend from "./screen/friends/Friend";
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <SafeAreaView>
+      <Friend />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
