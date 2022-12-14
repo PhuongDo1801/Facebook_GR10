@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from "react-native";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -53,7 +53,9 @@ export default function Login() {
             )}
           </View>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Home")}>
           <Text style={styles.textButton}>Đăng Nhập</Text>
         </TouchableOpacity>
         <View style={styles.seperate}>
@@ -64,8 +66,7 @@ export default function Login() {
       </View>
       <TouchableOpacity
         style={styles.footer}
-        // onPress={() => navigation.navigate("Register")}
-      >
+        onPress={() => navigation.navigate("Register")}>
         <Text style={styles.textFooter}>Tạo tài khoản Facebook mới</Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     paddingTop: marginx,
   },
   header: {
-    height: screenHeight * 0.3,
+    height: screenHeight * 0.4,
     justifyContent: "center",
   },
   body: {

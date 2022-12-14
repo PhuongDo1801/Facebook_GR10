@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
+import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,15 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
+  StatusBar,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 
 import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function App() {
+export default function Register({ navigation }) {
   const [selectedValue, setSelectedValue] = useState("Nam");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -42,6 +44,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Ionicons
+        name="arrow-back-outline"
+        size={35}
+        color="black"
+        style={styles.back}
+        onPress={() => navigation.goBack()}
+      />
       <View style={styles.header}>
         <Text style={styles.textHeaderTop}>Đăng ký</Text>
         <Text style={styles.textHeaderBottom}>Nhanh chóng và dễ dàng</Text>
@@ -124,9 +133,14 @@ const marginx =
     : 0;
 const styles = StyleSheet.create({
   container: {
+    marginTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
     alignItems: "center",
     flex: 1,
+  },
+  back: {
+    marginRight: "80%",
+    marginTop: 5,
   },
   header: {
     alignItems: "center",
