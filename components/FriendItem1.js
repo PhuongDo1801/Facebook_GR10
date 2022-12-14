@@ -2,21 +2,13 @@ import React from 'react'
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-export default function FriendItem(props) {
+export default function Friend(props) {
     return (
         <TouchableOpacity style={styles.container}> 
             <Image source={{uri: props.urlAvatar}} style={styles.image}></Image>
             <View style={styles.user}>
                 <Text style={styles.textName}>{props.name}</Text>
                 <Text style={styles.textFr}>{props.mutual} bạn chung</Text>
-                <View style={styles.areaButton}>
-                    <TouchableOpacity style={styles.buttonA}>
-                        <Text style={styles.textA}>Chấp nhận</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonB}>
-                        <Text style={styles.textB}>Xóa</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         </TouchableOpacity>
     )
@@ -37,7 +29,8 @@ const styles = StyleSheet.create({
     },
 
     user:{
-        paddingLeft: 10
+        paddingLeft: 10,
+        paddingTop: 10
     },
 
     textName:{

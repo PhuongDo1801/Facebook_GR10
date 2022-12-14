@@ -3,9 +3,9 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, Image} from "react-native";
 import iconReturn from "../../assets/109618.png";
 import { FontAwesome } from "@expo/vector-icons";
-import Friend from '../../components/FriendItem1';
+import Friend from '../../components/FriendItem2';
 
-export default function Friends() {
+export default function SuggestionFriend() {
 
     const messengers= [
 
@@ -42,10 +42,10 @@ export default function Friends() {
                 <TouchableOpacity style={styles.buttonReturn}>
                     <Image source={iconReturn} style={styles.iconReturn}></Image >
                 </TouchableOpacity>
-                <Text style={styles.textHeader}>Bạn bè</Text>
+                <Text style={styles.textHeader}>Gợi ý</Text>
             </View>
             <View style={styles.invite}>
-                <Text style={styles.textInvite}>7 Người bạn</Text>
+                <Text style={styles.textInvite}>Những người bạn có thể biết</Text>
             </View>
             <View style={styles.lstFriend}>
                 <ScrollView showsHorizontalScrollIndicator={false}>

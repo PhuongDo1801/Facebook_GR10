@@ -11,10 +11,10 @@ export default function FriendItem(props) {
                 <Text style={styles.textFr}>{props.mutual} bạn chung</Text>
                 <View style={styles.areaButton}>
                     <TouchableOpacity style={styles.buttonA}>
-                        <Text style={styles.textA}>Chấp nhận</Text>
+                        <Text style={styles.textA}>Thêm bạn bè</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonB}>
-                        <Text style={styles.textB}>Xóa</Text>
+                        <Text style={styles.textB}>Xóa, gỡ bỏ</Text>
                     </TouchableOpacity>
                 </View>
             </View>

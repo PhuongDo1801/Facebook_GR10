@@ -1,11 +1,11 @@
 import React from 'react'
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, Image} from "react-native";
-import iconReturn from "../../assets/109618.png";
-import { FontAwesome } from "@expo/vector-icons";
-import Friend from '../../components/FriendItem1';
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity } from "react-native";
 
-export default function Friends() {
+import { FontAwesome } from "@expo/vector-icons";
+import FriendItem from '../../components/FriendItem';
+
+export default function FriendInvite() {
 
     const messengers= [
 
@@ -28,7 +28,7 @@ export default function Friends() {
             return (
                 <View style={styles.friend} key={element.id}>
                     <View>
-                        <Friend urlAvatar={element.avatar} mutual={element.mutual} name={element.fullname}></Friend>
+                        <FriendItem urlAvatar={element.avatar} mutual={element.mutual} name={element.fullname}></FriendItem>
                     </View>
                     
                 </View>
@@ -39,13 +39,18 @@ export default function Friends() {
     return (
         <ScrollView style={styles.container}> 
             <View style={styles.header}>
-                <TouchableOpacity style={styles.buttonReturn}>
-                    <Image source={iconReturn} style={styles.iconReturn}></Image >
-                </TouchableOpacity>
                 <Text style={styles.textHeader}>Bạn bè</Text>
             </View>
+            <View style={styles.option}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.text}>Gợi ý</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.text}>Bạn bè</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.invite}>
-                <Text style={styles.textInvite}>7 Người bạn</Text>
+                <Text style={styles.textInvite}>Lời mời kết bạn</Text>
             </View>
             <View style={styles.lstFriend}>
                 <ScrollView showsHorizontalScrollIndicator={false}>
@@ -61,25 +66,14 @@ const styles = StyleSheet.create({
     },
 
     header: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
+        justifyContent: "flex-end",
         paddingTop: "10%",
-    },
-
-    buttonReturn:{
-        marginLeft: "4%",
-        paddingVertical: 5,
-    },
-
-    iconReturn: {
-        width: 30,
-        height: 30,
     },
 
     textHeader: {
         fontSize: 35,
         fontWeight: "bold",
-        marginLeft: "4%",
+        marginLeft: "2%",
     },
 
     invite: {
