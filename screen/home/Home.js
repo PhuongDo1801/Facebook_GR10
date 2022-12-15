@@ -15,7 +15,7 @@ import {
 import { FontAwesome5 } from "@expo/vector-icons";
 import HomeItem from "../../components/HomeItem";
 
-function Home({ navigation }) {
+function Home({ navigation, route }) {
   const Items = [
     {
       name: "Trịnh Đạt",
@@ -101,7 +101,7 @@ function Home({ navigation }) {
   ];
 
   return (
-    <Layout>
+    <Layout route={route.name}>
       <ScrollView style={styles.container}>
         <View style={styles.infor}>
           <View style={styles.imageAvatar}>

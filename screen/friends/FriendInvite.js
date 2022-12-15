@@ -14,7 +14,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import FriendItem from "../../components/FriendItem";
 import Layout from "../../components/Layout";
 
-export default function FriendInvite() {
+export default function FriendInvite({ route }) {
   const navigation = useNavigation();
   const messengers = [
     {
@@ -93,7 +93,7 @@ export default function FriendInvite() {
     });
   };
   return (
-    <Layout>
+    <Layout route={route.name}>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.textHeader}>Bạn bè</Text>
@@ -124,11 +124,12 @@ export default function FriendInvite() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: "#fff",
+  },
 
   header: {
     justifyContent: "flex-end",
-    paddingTop: "10%",
   },
 
   textHeader: {

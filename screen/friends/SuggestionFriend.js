@@ -1,5 +1,6 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,8 +12,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Friend from "../../components/FriendItem2";
+import Layout from "../../components/Layout";
 
-export default function SuggestionFriend() {
+export default function SuggestionFriend({ route }) {
   const navigation = useNavigation();
   const messengers = [
     {
@@ -91,47 +93,47 @@ export default function SuggestionFriend() {
     });
   };
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.buttonReturn}>
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="black"
-            style={styles.iconReturn}
-          />
-        </TouchableOpacity>
-        <Text style={styles.textHeader}>Gợi ý</Text>
-      </View>
-      <View style={styles.invite}>
-        <Text style={styles.textInvite}>Những người bạn có thể biết</Text>
-      </View>
-      <View style={styles.lstFriend}>
-        <ScrollView showsHorizontalScrollIndicator={false}>
-          {list1()}
-        </ScrollView>
-      </View>
-    </ScrollView>
+    <Layout route={route.name}>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.buttonReturn}>
+            <Ionicons
+              name="arrow-back"
+              size={28}
+              color="black"
+              style={styles.iconReturn}
+              onPress={() => navigation.goBack()}
+            />
+          </TouchableOpacity>
+          <Text style={styles.textHeader}>Gợi ý</Text>
+        </View>
+        <View style={styles.invite}>
+          <Text style={styles.textInvite}>Những người bạn có thể biết</Text>
+        </View>
+        <View style={styles.lstFriend}>
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            {list1()}
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </Layout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: "#fff",
+  },
 
   header: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    paddingTop: "10%",
   },
 
   buttonReturn: {
     marginLeft: "4%",
     paddingVertical: 5,
-  },
-
-  iconReturn: {
-    width: 30,
-    height: 30,
+    justifyContent: "center",
   },
 
   textHeader: {

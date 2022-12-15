@@ -1,5 +1,6 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,8 +13,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import Friend from "../../components/FriendItem1";
+import Layout from "../../components/Layout";
 
-export default function Friends() {
+export default function Friends({ route }) {
+  const navigation = useNavigation();
+
   const messengers = [
     {
       id: 1,
@@ -91,47 +95,49 @@ export default function Friends() {
     });
   };
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.buttonReturn}>
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="black"
-            style={styles.iconReturn}
-          />
-        </TouchableOpacity>
-        <Text style={styles.textHeader}>Bạn bè</Text>
-      </View>
-      <View style={styles.invite}>
-        <Text style={styles.textInvite}>7 Người bạn</Text>
-      </View>
-      <View style={styles.lstFriend}>
-        <ScrollView showsHorizontalScrollIndicator={false}>
-          {list1()}
-        </ScrollView>
-      </View>
-    </ScrollView>
+    <Layout route={route.name}>
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.buttonReturn}>
+            <Ionicons
+              name="arrow-back"
+              size={28}
+              color="black"
+              style={styles.iconReturn}
+              onPress={() => navigation.goBack()}
+            />
+          </TouchableOpacity>
+          <Text style={styles.textHeader}>Bạn bè</Text>
+        </View>
+        <View style={styles.invite}>
+          <Text style={styles.textInvite}>7 Người bạn</Text>
+        </View>
+        <View style={styles.lstFriend}>
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            {list1()}
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </Layout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
+  },
 
   header: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    paddingTop: "10%",
   },
 
   buttonReturn: {
     marginLeft: "4%",
     paddingVertical: 5,
-  },
-
-  iconReturn: {
-    width: 30,
-    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   textHeader: {

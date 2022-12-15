@@ -7,16 +7,20 @@ import Register from "./screen/register/Register";
 import Layout from "./components/Layout";
 import Home from "./screen/home/Home";
 import Messenger from "./screen/messenger/Messenger";
-import Friend from "./components/FriendItem1";
+import Friend from "./screen/friends/Friend";
 import FriendInvite from "./screen/friends/FriendInvite";
 import SuggestionFriend from "./screen/friends/SuggestionFriend";
+import Notification from "./screen/notification/Notification";
+import Information from "./screen/information/Information";
+import Menu from "./screen/menu/Menu";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false, animation: "none" }}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Messenger" component={Messenger} />
         <Stack.Screen name="Register" component={Register} />
@@ -24,6 +28,10 @@ export default function App() {
         <Stack.Screen name="Friend" component={Friend} />
         <Stack.Screen name="FriendInvite" component={FriendInvite} />
         <Stack.Screen name="SuggestionFriend" component={SuggestionFriend} />
+        <Stack.Screen name="Layout" component={Layout} />
+        <Stack.Screen name="Notification" component={Notification} />
+        <Stack.Screen name="Information" component={Information} />
+        <Stack.Screen name="Menu" component={Menu} />
       </Stack.Navigator>
     </NavigationContainer>
   );
