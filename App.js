@@ -34,6 +34,7 @@ export default function App() {
         <Stack.Screen name="Information" component={Information} />
         <Stack.Screen name="Menu" component={Menu} />
       </Stack.Navigator>
+      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
