@@ -17,8 +17,8 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-export default function Layout({ children }) {
-  const [selected, setSelected] = useState("");
+export default function Layout({ children, route }) {
+  const [selected, setSelected] = useState(route);
   const navigation = useNavigation();
 
   return (
@@ -55,74 +55,87 @@ export default function Layout({ children }) {
         <View style={styles.body}>
           <View
             style={{
-              borderBottomWidth: selected === "home" ? 1 : 0,
-              borderColor: selected === "home" ? "#0066ff" : "#000",
+              borderBottomWidth: selected === "Home" ? 1 : 0,
+              borderColor: selected === "Home" ? "#0066ff" : "#000",
             }}>
             <FontAwesome5
               name="home"
               size={28}
-              color={selected === "home" ? "#1877f2" : "#000"}
+              color={selected === "Home" ? "#1877f2" : "#000"}
               style={styles.iconBody}
               onPress={() => {
                 navigation.navigate("Home");
-                setSelected("home");
               }}
             />
           </View>
           <View
             style={{
-              borderBottomWidth: selected === "user-friends" ? 1 : 0,
-              borderColor: selected === "user-friends" ? "#0066ff" : "#000",
+              borderBottomWidth:
+                selected === "FriendInvite" ||
+                selected === "SuggestionFriend" ||
+                selected === "Friend"
+                  ? 1
+                  : 0,
+              borderColor:
+                selected === "FriendInvite" ||
+                selected === "SuggestionFriend" ||
+                selected === "Friend"
+                  ? "#0066ff"
+                  : "#000",
             }}>
             <FontAwesome5
               name="user-friends"
               size={28}
-              color={selected === "user-friends" ? "#1877f2" : "#000"}
+              color={
+                selected === "FriendInvite" ||
+                selected === "SuggestionFriend" ||
+                selected === "Friend"
+                  ? "#1877f2"
+                  : "#000"
+              }
               style={styles.iconBody}
               onPress={() => {
-                setSelected("user-friends");
-
                 navigation.navigate("FriendInvite");
               }}
             />
           </View>
           <View
             style={{
-              borderBottomWidth: selected === "user" ? 1 : 0,
-              borderColor: selected === "user" ? "#0066ff" : "#000",
+              borderBottomWidth: selected === "Information" ? 1 : 0,
+              borderColor: selected === "Information" ? "#0066ff" : "#000",
             }}>
             <FontAwesome
               name="user-circle-o"
               size={28}
-              color={selected === "user" ? "#1877f2" : "#000"}
+              color={selected === "Information" ? "#1877f2" : "#000"}
               style={styles.iconBody}
-              onPress={() => setSelected("user")}
+              onPress={() => navigation.navigate("Information")}
             />
           </View>
           <View
             style={{
-              borderBottomWidth: selected === "bell" ? 1 : 0,
-              borderColor: selected === "bell" ? "#0066ff" : "#000",
+              borderBottomWidth: selected === "Notification" ? 1 : 0,
+              borderColor: selected === "Notification" ? "#0066ff" : "#000",
             }}>
             <FontAwesome
               name="bell"
               size={28}
-              color={selected === "bell" ? "#1877f2" : "#000"}
+              color={selected === "Notification" ? "#1877f2" : "#000"}
               style={styles.iconBody}
-              onPress={() => setSelected("bell")}
+              onPress={() => navigation.navigate("Notification")}
             />
           </View>
           <View
             style={{
-              borderBottomWidth: selected === "bars" ? 1 : 0,
-              borderColor: selected === "bars" ? "#0066ff" : "#000",
+              borderBottomWidth: selected === "Menu" ? 1 : 0,
+              borderColor: selected === "Menu" ? "#0066ff" : "#000",
             }}>
             <FontAwesome
               name="bars"
               size={28}
-              color={selected === "bars" ? "#1877f2" : "#000"}
+              color={selected === "Menu" ? "#1877f2" : "#000"}
               style={styles.iconBody}
-              onPress={() => setSelected("bars")}
+              onPress={() => navigation.navigate("Menu")}
             />
           </View>
         </View>

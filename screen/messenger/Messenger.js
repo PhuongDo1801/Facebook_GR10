@@ -3,7 +3,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Friend } from "../../components/Messenger";
 import MesFr from "../../components/Messenger";
-export default function Messenger() {
+
+export default function Messenger({ navigation }) {
   const messengers = [
     {
       id: 1,
@@ -87,7 +88,15 @@ export default function Messenger() {
   return (
     <View style={styles.contentHeader}>
       <View style={styles.header}>
-        <Text style={styles.textHeader}>Tin Nhắn</Text>
+        <View style={styles.back}>
+          <Ionicons
+            name="arrow-back-sharp"
+            size={28}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
+          <Text style={styles.textHeader}>Tin Nhắn</Text>
+        </View>
         <View style={styles.group}>
           <Ionicons
             name="settings"
@@ -123,10 +132,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 30,
   },
+  back: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+  },
   textHeader: {
     fontSize: 25,
     fontWeight: "600",
-    marginLeft: 30,
+    marginLeft: 10,
   },
   group: {
     flexDirection: "row",
