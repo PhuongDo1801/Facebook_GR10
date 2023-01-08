@@ -11,6 +11,10 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { ImagePicker } from "expo-image-multiple-picker";
+import ThreePicture from "../../components/ThreePicture";
+import TwoPicture from "../../components/TwoPicture";
+import FourPicture from "../../components/FourPicture";
 
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -20,9 +24,30 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function AddPost() {
   const [vertical, setVertical] = useState(false);
+  const [showImagePicker, setShowImagePicker] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+
+  const closeImagePicker = (assets) => {
+    setSelectedImages([...assets]);
+    setShowImagePicker(false);
+  };
+
+  const ImagePickerContainer = () => {
+    return (
+      <View style={styles.imagePickerContainer}>
+        <ImagePicker
+          onSave={(assets) => closeImagePicker(assets)}
+          onCancel={() => setShowImagePicker(false)}
+          multiple
+          limit={4}
+        />
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
+      {showImagePicker && <ImagePickerContainer />}
       <View style={styles.contentHeader}>
         <View style={styles.contentHeaderLeft}>
           <AntDesign name="arrowleft" size={28} color="black" />
@@ -54,14 +79,36 @@ function AddPost() {
           <TextInput
             style={styles.textInput}
             multiline={true}
-            placeholder={"Bạn đang nghĩ gì? "}
+            placeholder={
+              selectedImages !== []
+                ? "Hãy nói gì về bức ảnh này"
+                : "Bạn đang nghĩ gì? "
+            }
           />
+        </View>
+        <View>
+          {selectedImages.length === 3 ? (
+            <ThreePicture selectedImages={selectedImages} />
+          ) : selectedImages.length === 2 ? (
+            <TwoPicture selectedImages={selectedImages} />
+          ) : selectedImages.length === 4 ? (
+            <FourPicture selectedImages={selectedImages} />
+          ) : selectedImages.length === 1 ? (
+            <Image
+              source={{ uri: selectedImages[0].uri }}
+              style={styles.picture}
+            />
+          ) : (
+            ""
+          )}
         </View>
       </View>
       <View style={styles.footer}>
         {vertical ? (
           <View style={styles.iconFooterCol}>
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => setShowImagePicker((pre) => !pre)}>
               <Ionicons
                 name="md-images"
                 size={24}
@@ -102,7 +149,7 @@ function AddPost() {
           </View>
         ) : (
           <View style={styles.iconFooter}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowImagePicker((pre) => !pre)}>
               <Ionicons name="md-images" size={24} color="green" />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -170,12 +217,12 @@ const styles = StyleSheet.create({
   // Body
   contentBody: {
     width: SCREEN_WIDTH,
-    paddingHorizontal: 10,
   },
   headerBody: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 30,
+    paddingHorizontal: 10,
   },
   avatar: {
     borderRadius: 50,
@@ -206,7 +253,8 @@ const styles = StyleSheet.create({
 
   //Body Thân body
   betweenBody: {
-    height: 200,
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
   textInput: {
     fontSize: 22,
@@ -221,6 +269,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
     borderTopColor: "#666",
     bottom: 0,
+    backgroundColor: "#fff",
   },
   iconFooter: {
     marginVertical: 10,
@@ -240,6 +289,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+  },
+
+  imagePickerContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "white",
+    zIndex: 9,
   },
 });
 

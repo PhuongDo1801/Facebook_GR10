@@ -18,11 +18,13 @@
     "expo": "~47.0.8",
     "expo-checkbox": "^2.2.2",
     "expo-firebase-recaptcha": "^2.3.1",
+    "expo-image-multiple-picker": "^4.7.7",
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.15.0",
     "formik": "^2.2.9",
     "react": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-svg": "^13.4.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
