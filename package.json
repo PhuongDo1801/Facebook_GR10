@@ -10,14 +10,20 @@
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "^6.5.2",
+    "@react-native-firebase/app": "^16.5.0",
     "@react-native-picker/picker": "^2.4.8",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.6",
+    "axios": "^1.2.1",
     "expo": "~47.0.8",
+    "expo-checkbox": "^2.2.2",
+    "expo-firebase-recaptcha": "^2.3.1",
     "expo-status-bar": "~1.4.2",
+    "firebase": "^9.15.0",
+    "formik": "^2.2.9",
     "react": "18.1.0",
     "react-native": "0.70.5",
-    "react-native-picker-select": "^8.0.4"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

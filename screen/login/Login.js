@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { FontAwesome } from "@expo/vector-icons";
+import { Formik } from "formik";
 import {
   StyleSheet,
   Text,
@@ -9,68 +9,115 @@ import {
   TextInput,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function Login({ navigation }) {
   const [visible, setVisible] = useState(false);
 
+  const handleLogin = async (values) => {
+    // var token = await AsyncStorage.getItem("id_token");
+    return (
+      fetch("https://severfacebook.up.railway.app/api/v1/users/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          // authorization: "token " + token,
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          const statusCode = response.status;
+          if (statusCode === 200) {
+            navigation.replace("Home");
+          } else {
+            alert(
+              "Số điện thoại hoặc mật khẩu không chính xác\n " +
+                "Vui lòng đăng nhập lại"
+            );
+          }
+        })
+        // .then((data) => console.log(data))
+        // // return console.log(values);
+        .catch((error) => {
+          console.log(values);
+          console.error(error);
+        })
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <FontAwesome name="facebook-official" size={90} color="#1877f2" />
-      </View>
-      <View style={styles.body}>
-        <View style={styles.inputForm}>
-          <TextInput
-            style={styles.input}
-            placeholder="Số Điện Thoại"
-            keyboardType="numeric"
-          />
-          <View style={styles.inputPass}>
-            <TextInput
-              autoCapitalize="none"
-              autoComplete="password"
-              secureTextEntry={visible === false ? true : false}
-              placeholder="Mật khẩu"
-              style={styles.input}
-            />
-            {visible ? (
-              <FontAwesome
-                name="eye"
-                size={24}
-                color="black"
-                style={styles.iconEye}
-                onPress={() => setVisible(!visible)}
-              />
-            ) : (
-              <FontAwesome
-                name="eye-slash"
-                size={24}
-                color="black"
-                style={styles.iconEye}
-                onPress={() => setVisible(!visible)}
-              />
-            )}
+    <Formik
+      initialValues={{
+        phonenumber: "",
+        password: "",
+      }}
+      onSubmit={handleLogin}>
+      {({ handleChange, handleBlur, handleSubmit, values }) => (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <FontAwesome name="facebook-official" size={90} color="#1877f2" />
           </View>
-        </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Home")}>
-          <Text style={styles.textButton}>Đăng Nhập</Text>
-        </TouchableOpacity>
-        <View style={styles.seperate}>
-          <View style={styles.itemSeperate}></View>
-          <Text>hoặc</Text>
-          <View style={styles.itemSeperate}></View>
-        </View>
-      </View>
-      <TouchableOpacity
-        style={styles.footer}
-        onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.textFooter}>Tạo tài khoản Facebook mới</Text>
-      </TouchableOpacity>
-      <StatusBar style="auto" />
-    </SafeAreaView>
+          <View style={styles.body}>
+            <View style={styles.inputForm}>
+              <TextInput
+                style={styles.input}
+                placeholder="Số Điện Thoại"
+                keyboardType="numeric"
+                onChangeText={handleChange("phonenumber")}
+                onBlur={handleBlur("phonenumber")}
+                value={values.phonenumber}
+              />
+              <View style={styles.inputPass}>
+                <TextInput
+                  autoCapitalize="none"
+                  autoComplete="password"
+                  secureTextEntry={visible === false ? true : false}
+                  placeholder="Mật khẩu"
+                  style={styles.input}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                />
+                {visible ? (
+                  <FontAwesome
+                    name="eye"
+                    size={24}
+                    color="black"
+                    style={styles.iconEye}
+                    onPress={() => setVisible(!visible)}
+                  />
+                ) : (
+                  <FontAwesome
+                    name="eye-slash"
+                    size={24}
+                    color="black"
+                    style={styles.iconEye}
+                    onPress={() => setVisible(!visible)}
+                  />
+                )}
+              </View>
+            </View>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.textButton}>Đăng Nhập</Text>
+            </TouchableOpacity>
+            <View style={styles.seperate}>
+              <View style={styles.itemSeperate}></View>
+              <Text>hoặc</Text>
+              <View style={styles.itemSeperate}></View>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.footer}
+            onPress={() => navigation.navigate("OtpPhone")}>
+            <Text style={styles.textFooter}>Tạo tài khoản Facebook mới</Text>
+          </TouchableOpacity>
+          <StatusBar style="auto" />
+        </SafeAreaView>
+      )}
+    </Formik>
   );
 }
 

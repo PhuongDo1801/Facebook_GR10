@@ -13,6 +13,8 @@ import SuggestionFriend from "./screen/friends/SuggestionFriend";
 import Notification from "./screen/notification/Notification";
 import Information from "./screen/information/Information";
 import Menu from "./screen/menu/Menu";
+import OtpPhone from "./screen/otpPhone/OtpPhone";
+import AddPost from "./screen/posts/AddPost";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -32,7 +34,10 @@ export default function App() {
         <Stack.Screen name="Notification" component={Notification} />
         <Stack.Screen name="Information" component={Information} />
         <Stack.Screen name="Menu" component={Menu} />
+        <Stack.Screen name="OtpPhone" component={OtpPhone} />
+        <Stack.Screen name="AddPost" component={AddPost} />
       </Stack.Navigator>
+      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
