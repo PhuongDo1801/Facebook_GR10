@@ -56,12 +56,12 @@ export default function Layout({ children, route }) {
           <View
             style={{
               borderBottomWidth: selected === "Home" ? 1 : 0,
-              borderColor: selected === "Home" ? "#0066ff" : "#000",
+              borderColor: selected === "Home" ? "#0066ff" : "#777",
             }}>
             <FontAwesome5
               name="home"
               size={28}
-              color={selected === "Home" ? "#1877f2" : "#000"}
+              color={selected === "Home" ? "#1877f2" : "#777"}
               style={styles.iconBody}
               onPress={() => {
                 navigation.navigate("Home");
@@ -81,7 +81,7 @@ export default function Layout({ children, route }) {
                 selected === "SuggestionFriend" ||
                 selected === "Friend"
                   ? "#0066ff"
-                  : "#000",
+                  : "#777",
             }}>
             <FontAwesome5
               name="user-friends"
@@ -91,7 +91,7 @@ export default function Layout({ children, route }) {
                 selected === "SuggestionFriend" ||
                 selected === "Friend"
                   ? "#1877f2"
-                  : "#000"
+                  : "#777"
               }
               style={styles.iconBody}
               onPress={() => {
@@ -102,12 +102,12 @@ export default function Layout({ children, route }) {
           <View
             style={{
               borderBottomWidth: selected === "Information" ? 1 : 0,
-              borderColor: selected === "Information" ? "#0066ff" : "#000",
+              borderColor: selected === "Information" ? "#0066ff" : "#777",
             }}>
             <FontAwesome
               name="user-circle-o"
               size={28}
-              color={selected === "Information" ? "#1877f2" : "#000"}
+              color={selected === "Information" ? "#1877f2" : "#777"}
               style={styles.iconBody}
               onPress={() => navigation.navigate("Information")}
             />
@@ -115,12 +115,12 @@ export default function Layout({ children, route }) {
           <View
             style={{
               borderBottomWidth: selected === "Notification" ? 1 : 0,
-              borderColor: selected === "Notification" ? "#0066ff" : "#000",
+              borderColor: selected === "Notification" ? "#0066ff" : "#777",
             }}>
             <FontAwesome
               name="bell"
               size={28}
-              color={selected === "Notification" ? "#1877f2" : "#000"}
+              color={selected === "Notification" ? "#1877f2" : "#777"}
               style={styles.iconBody}
               onPress={() => navigation.navigate("Notification")}
             />
@@ -128,12 +128,12 @@ export default function Layout({ children, route }) {
           <View
             style={{
               borderBottomWidth: selected === "Menu" ? 1 : 0,
-              borderColor: selected === "Menu" ? "#0066ff" : "#000",
+              borderColor: selected === "Menu" ? "#0066ff" : "#777",
             }}>
             <FontAwesome
               name="bars"
               size={28}
-              color={selected === "Menu" ? "#1877f2" : "#000"}
+              color={selected === "Menu" ? "#1877f2" : "#777"}
               style={styles.iconBody}
               onPress={() => navigation.navigate("Menu")}
             />
@@ -148,7 +148,7 @@ export default function Layout({ children, route }) {
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 
-const marginy = SCREEN_HEIGHT > 700 ? 3.5 : 0;
+const marginy = SCREEN_HEIGHT > 750 ? 3.5 : 0;
 
 const styles = StyleSheet.create({
   container: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   contentHeader: {
     position: "absolute",
     width: SCREEN_WIDTH,
-    paddingTop: Math.round(StatusBar.currentHeight),
+    paddingTop: 1.2 * Math.round(StatusBar.currentHeight),
     backgroundColor: "#fff",
     paddingHorizontal: 10,
     borderBottomWidth: 0.5,
@@ -169,7 +169,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingBottom: 10,
-    marginBottom: 10,
   },
   textHeader: {
     fontSize: 25,
@@ -196,6 +195,6 @@ const styles = StyleSheet.create({
     // paddingBottom: 8,
   },
   contentBody: {
-    top: Math.round(StatusBar.currentHeight) + 105.5 + marginy,
+    top: 1.2 * Math.round(StatusBar.currentHeight) + 95.5 + marginy,
   },
 });

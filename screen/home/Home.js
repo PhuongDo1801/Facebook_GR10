@@ -113,7 +113,9 @@ function Home({ navigation, route }) {
             />
           </View>
           <View style={styles.search}>
-            <TouchableOpacity style={styles.searchButton}>
+            <TouchableOpacity
+              style={styles.searchButton}
+              onPress={() => navigation.navigate("AddPost")}>
               <Text style={styles.textSearch}>Bạn đang nghĩ gì?</Text>
             </TouchableOpacity>
           </View>
