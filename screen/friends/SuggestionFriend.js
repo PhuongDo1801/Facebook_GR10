@@ -93,7 +93,7 @@ export default function SuggestionFriend({ route }) {
     });
   };
   return (
-    <Layout route={route.name}>
+    // <Layout route={route.name}>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.buttonReturn}>
@@ -116,30 +116,36 @@ export default function SuggestionFriend({ route }) {
           </ScrollView>
         </View>
       </ScrollView>
-    </Layout>
+    // </Layout>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
+    paddingHorizontal: 10,
   },
 
   header: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    paddingTop: "10%",
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
   },
 
   buttonReturn: {
-    marginLeft: "4%",
     paddingVertical: 5,
+    alignItems: "center",
     justifyContent: "center",
   },
 
   textHeader: {
-    fontSize: 35,
-    fontWeight: "bold",
-    marginLeft: "4%",
+    fontSize: 25,
+    fontWeight: "400",
+    marginLeft: "2%",
+    paddingLeft: "30%",
+    paddingTop: "1%",
   },
 
   invite: {
@@ -147,7 +153,7 @@ const styles = StyleSheet.create({
   },
 
   textInvite: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "bold",
     marginLeft: "2%",
   },
