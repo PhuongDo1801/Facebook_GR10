@@ -126,6 +126,7 @@ export default function FriendInvite({ route }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
+    paddingHorizontal: 10,
   },
 
   header: {
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
   },
 
   textHeader: {
-    fontSize: 35,
+    fontSize: 25,
     fontWeight: "bold",
     marginLeft: "2%",
   },
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
 
   textInvite: {
     fontSize: 25,
-    fontWeight: "bold",
+    fontWeight: "500",
     marginLeft: "2%",
   },
 
@@ -157,11 +158,12 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
+    paddingBottom: 10,
   },
 
   button: {
     marginTop: 10,
-    backgroundColor: "#ccc",
+    backgroundColor: "#eee",
     paddingVertical: 5,
     paddingHorizontal: 15,
     alignItems: "center",
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "500",
   },
 });

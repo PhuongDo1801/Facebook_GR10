@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   },
 
   buttonA: {
+    width: 130,
     marginVertical: 10,
     backgroundColor: "#1877f2",
     paddingTop: 8,
@@ -66,8 +67,9 @@ const styles = StyleSheet.create({
   },
 
   buttonB: {
+    width: 130,
     marginVertical: 10,
-    backgroundColor: "#ccc",
+    backgroundColor: "#eee",
     paddingVertical: 8,
     paddingHorizontal: 20,
     marginLeft: 5,
@@ -77,10 +79,12 @@ const styles = StyleSheet.create({
 
   textA: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 15,
+    fontWeight: "500",
   },
 
   textB: {
-    fontSize: 20,
+    fontSize: 15,
+    fontWeight: "500",
   },
 });

@@ -17,6 +17,7 @@ export default function Friend(props) {
         <Text style={styles.textName}>{props.name}</Text>
         <Text style={styles.textFr}>{props.mutual} bạn chung</Text>
       </View>
+      
     </TouchableOpacity>
   );
 }
@@ -28,21 +29,22 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
     borderRadius: 100,
     borderColor: "#ccc",
     borderWidth: 1,
   },
 
   user: {
-    paddingLeft: 10,
-    paddingTop: 10,
+    paddingLeft: "4%",
+    paddingTop: "3%",
   },
 
   textName: {
-    fontSize: 22,
-    fontWeight: "bold",
+    fontSize: 20,
+    fontWeight: "500",
+    paddingTop: "2%"
   },
 
   areaButton: {

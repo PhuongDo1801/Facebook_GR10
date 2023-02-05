@@ -75,13 +75,16 @@ export default function Information({ navigation, route }) {
 }
 
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
+const SCREEN_WEIGHT = Math.round(Dimensions.get("window").width);
+const margintop =
+  SCREEN_HEIGHT > 700 ? 0.12 * SCREEN_HEIGHT : 0.08 * SCREEN_HEIGHT;
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
   },
   groupImage: {
-    height: 0.2 * SCREEN_HEIGHT + 150,
+    height: 0.2 * SCREEN_HEIGHT + 0.35 * SCREEN_WEIGHT,
   },
   image: {
     height: 0.3 * SCREEN_HEIGHT,
@@ -90,16 +93,16 @@ const styles = StyleSheet.create({
     borderRadius: 200,
     borderWidth: 5,
     borderColor: "#fff",
-    width: 200,
-    height: 200,
+    width: 0.5 * SCREEN_WEIGHT,
+    height: 0.5 * SCREEN_WEIGHT,
     marginLeft: 10,
-    marginTop: 0.1 * SCREEN_HEIGHT,
+    marginTop: margintop,
     position: "relative",
   },
   camera: {
     position: "absolute",
     top: 0.3 * SCREEN_HEIGHT,
-    left: 160,
+    left: 0.35 * SCREEN_WEIGHT,
     padding: 10,
     borderRadius: 50,
     backgroundColor: "#ccc",

@@ -13,7 +13,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import Friend from "../../components/FriendItem1";
-import Layout from "../../components/Layout";
 
 export default function Friends({ route }) {
   const navigation = useNavigation();
@@ -95,7 +94,6 @@ export default function Friends({ route }) {
     });
   };
   return (
-    <Layout route={route.name}>
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.buttonReturn}>
@@ -110,7 +108,7 @@ export default function Friends({ route }) {
           <Text style={styles.textHeader}>Bạn bè</Text>
         </View>
         <View style={styles.invite}>
-          <Text style={styles.textInvite}>7 Người bạn</Text>
+          <Text style={styles.textInvite}>7 Bạn bè</Text>
         </View>
         <View style={styles.lstFriend}>
           <ScrollView showsHorizontalScrollIndicator={false}>
@@ -118,7 +116,6 @@ export default function Friends({ route }) {
           </ScrollView>
         </View>
       </ScrollView>
-    </Layout>
   );
 }
 
@@ -131,19 +128,23 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    paddingTop: "10%",
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
   },
 
   buttonReturn: {
-    marginLeft: "4%",
     paddingVertical: 5,
     alignItems: "center",
     justifyContent: "center",
   },
 
   textHeader: {
-    fontSize: 35,
-    fontWeight: "bold",
-    marginLeft: "4%",
+    fontSize: 25,
+    fontWeight: "400",
+    marginLeft: "2%",
+    paddingLeft: "30%",
+    paddingTop: "1%",
   },
 
   invite: {
