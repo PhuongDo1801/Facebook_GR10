@@ -10,11 +10,11 @@ import Messenger from "./screen/messenger/Messenger";
 import Friend from "./screen/friends/Friend";
 import FriendInvite from "./screen/friends/FriendInvite";
 import SuggestionFriend from "./screen/friends/SuggestionFriend";
-import Notification from "./screen/notification/Notification";
+import Notification from "./screen/notification/notification";
 import Information from "./screen/information/Information";
 import Menu from "./screen/menu/Menu";
 import OtpPhone from "./screen/otpPhone/OtpPhone";
-import AddPost from "./screen/posts/AddPost";
+import AddPost from "./screen/posts/addPost";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
