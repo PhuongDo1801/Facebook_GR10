@@ -16,6 +16,9 @@ import Information from "./screen/information/Information";
 import Menu from "./screen/menu/Menu";
 import OtpPhone from "./screen/otpPhone/OtpPhone";
 import AddPost from "./screen/posts/AddPost";
+import ShowInfor from "./screen/user/ShowInfor";
+import EditPost from "./screen/posts/EditPost";
+import InforFriend from "./screen/friends/InforFriend";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -37,6 +40,9 @@ export default function App() {
         <Stack.Screen name="Menu" component={Menu} />
         <Stack.Screen name="OtpPhone" component={OtpPhone} />
         <Stack.Screen name="AddPost" component={AddPost} />
+        <Stack.Screen name="ShowInfor" component={ShowInfor} />
+        <Stack.Screen name="EditPost" component={EditPost} />
+        <Stack.Screen name="InforFriend" component={InforFriend} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,71 +9,66 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function Friend(props) {
+import { AntDesign } from "@expo/vector-icons";
+
+export default function Friend({ avatar, username, mutual, id, cover_image }) {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity style={styles.container}>
-      <Image source={{ uri: props.urlAvatar }} style={styles.image}></Image>
-      <View style={styles.user}>
-        <Text style={styles.textName}>{props.name}</Text>
-        <Text style={styles.textFr}>{props.mutual} bạn chung</Text>
+    <View style={styles.container}>
+      <View style={styles.body}>
+        <TouchableOpacity
+          style={styles.content}
+          onPress={() =>
+            navigation.navigate("InforFriend", {
+              avatar: avatar,
+              idUser: id,
+              username: username,
+              cover_image: cover_image,
+            })
+          }>
+          <Image source={{ uri: avatar }} style={styles.image}></Image>
+          <View style={styles.user}>
+            <Text style={styles.textName}>{username}</Text>
+            <Text style={styles.textFr}>{mutual} bạn chung</Text>
+          </View>
+        </TouchableOpacity>
+        <AntDesign name="delete" size={24} color="black" />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    paddingVertical: 5,
+    backgroundColor: "#fff",
   },
-
+  body: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    justifyContent: "space-between",
+  },
+  content: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   image: {
-    width: 90,
-    height: 90,
+    width: 70,
+    height: 70,
     borderRadius: 100,
     borderColor: "#ccc",
     borderWidth: 1,
   },
-
   user: {
     paddingLeft: 10,
-    paddingTop: 10,
   },
-
   textName: {
-    fontSize: 22,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "600",
   },
 
   areaButton: {
     flexDirection: "row",
-  },
-
-  buttonA: {
-    marginVertical: 10,
-    backgroundColor: "#1877f2",
-    paddingTop: 8,
-    paddingHorizontal: 20,
-    alignItems: "center",
-    borderRadius: 8,
-  },
-
-  buttonB: {
-    marginVertical: 10,
-    backgroundColor: "#ccc",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    marginLeft: 5,
-    alignItems: "center",
-    borderRadius: 8,
-  },
-
-  textA: {
-    color: "#fff",
-    fontSize: 20,
-  },
-
-  textB: {
-    fontSize: 20,
   },
 });

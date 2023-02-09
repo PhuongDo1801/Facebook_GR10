@@ -1,8 +1,7 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import {
-  SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -11,7 +10,7 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Friend from "../../components/FriendItem2";
+import FriendItem from "../../components/FriendItem";
 import Layout from "../../components/Layout";
 
 export default function SuggestionFriend({ route }) {
@@ -78,84 +77,71 @@ export default function SuggestionFriend({ route }) {
       mutual: 5,
     },
   ];
-  const list1 = () => {
-    return messengers.map((element) => {
-      return (
-        <View style={styles.friend} key={element.id}>
-          <View>
-            <Friend
-              urlAvatar={element.avatar}
-              mutual={element.mutual}
-              name={element.fullname}></Friend>
-          </View>
-        </View>
-      );
-    });
-  };
+
   return (
-    <Layout route={route.name}>
-      <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.buttonReturn}>
-            <Ionicons
-              name="arrow-back"
-              size={28}
-              color="black"
-              style={styles.iconReturn}
-              onPress={() => navigation.goBack()}
-            />
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>Gợi ý</Text>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.buttonReturn}>
+          <Ionicons
+            name="arrow-back"
+            size={28}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>Gợi ý</Text>
+      </View>
+      <ScrollView style={styles.body}>
         <View style={styles.invite}>
           <Text style={styles.textInvite}>Những người bạn có thể biết</Text>
         </View>
-        <View style={styles.lstFriend}>
+        <View style={styles.listFriend}>
           <ScrollView showsHorizontalScrollIndicator={false}>
-            {list1()}
+            {messengers.map((Friend, index) => (
+              <View style={styles.friend} key={index}>
+                <FriendItem
+                  avatar={Friend.avatar}
+                  mutual={Friend.mutual}
+                  username={Friend.fullname}
+                  text={"Thêm bạn bè"}
+                />
+              </View>
+            ))}
           </ScrollView>
         </View>
       </ScrollView>
-    </Layout>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
+    flex: 1,
   },
-
   header: {
+    borderBottomColor: "#000",
+    borderBottomWidth: 0.5,
     flexDirection: "row",
-    justifyContent: "flex-start",
+    paddingVertical: 10,
+    marginHorizontal: 15,
   },
-
-  buttonReturn: {
-    marginLeft: "4%",
-    paddingVertical: 5,
-    justifyContent: "center",
-  },
-
   textHeader: {
-    fontSize: 35,
-    fontWeight: "bold",
-    marginLeft: "4%",
+    marginLeft: 5,
+    fontSize: 18,
   },
-
+  //body
+  body: {
+    paddingHorizontal: 15,
+  },
   invite: {
-    paddingTop: "2%",
+    paddingTop: 15,
   },
-
   textInvite: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
-    marginLeft: "2%",
   },
-
-  lstFriend: {
-    paddingTop: 10,
-  },
-
   option: {
     flexDirection: "row",
     paddingBottom: 5,

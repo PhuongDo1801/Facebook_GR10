@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Text,
   StyleSheet,
   View,
   TextInput,
-  ImageBackground,
   StatusBar,
-  ScrollView,
   Dimensions,
   Image,
   TouchableOpacity,
@@ -15,6 +13,8 @@ import {
 } from "react-native";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { ImagePicker } from "expo-image-multiple-picker";
+import * as ImagePick from "expo-image-picker";
+// import Video from "react-native-video";
 import ThreePicture from "../../components/ThreePicture";
 import TwoPicture from "../../components/TwoPicture";
 import FourPicture from "../../components/FourPicture";
@@ -31,6 +31,12 @@ function AddPost({ navigation }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [text, onChangeText] = useState("");
   const [loading, setLoaing] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  let images = [];
+
+  selectedImages.map((itemImage, index) => {
+    images.push(itemImage.uri);
+  });
 
   const closeImagePicker = (assets) => {
     setSelectedImages([...assets]);
@@ -50,7 +56,43 @@ function AddPost({ navigation }) {
     );
   };
 
+  const handleVideoPick = async () => {
+    try {
+      const result = await ImagePick.launchImageLibraryAsync({
+        mediaTypes: ImagePick.MediaTypeOptions.Videos,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setSelectedVideo(result.assets[0].uri);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  console.log(selectedVideo);
+
+  const Uploadvideo = async () => {
+    const fileName = "video-" + new Date().getTime();
+    const storage = getStorage();
+    const my_ref = ref(storage, `video/${fileName}.mp4`);
+    const video = await fetch(selectedVideo);
+    const bytes = await video.blob();
+    await uploadBytes(my_ref, bytes)
+      .then(async (res) => {
+        await getDownloadURL(my_ref)
+          .then((url) => {
+            setSelectedVideo(url);
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  };
+
   const handlePost = async () => {
+    Uploadvideo();
     let responseImage = [];
     for (let i = 0; i < selectedImages.length; i++) {
       const fileName = "img-" + new Date().getTime();
@@ -76,43 +118,41 @@ function AddPost({ navigation }) {
         })
         .catch((error) => console.log(error));
     }
-    setLoaing(true);
-    const token = await AsyncStorage.getItem("id_token");
-    const potion = {
-      described: text,
-      images: responseImage,
-    };
-    return fetch("https://severfacebook.up.railway.app/api/v1/posts/create", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        authorization: "token " + token,
-      },
-      body: JSON.stringify(potion),
-    })
-      .then((response) => {
-        const statusCode = response.status;
-        if (statusCode === 200) {
-          return (response = response.json());
-        } else {
-          alert(
-            "Số điện thoại hoặc mật khẩu không chính xác\n " +
-              "Vui lòng đăng nhập lại"
-          );
-        }
-      })
-      .then((response) => {
-        if (response !== undefined) {
-          // console.log(response.data.described);
-          navigation.replace("Home", {
-            _id: response.data._id,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+
+    // setLoaing(true);
+    // const token = await AsyncStorage.getItem("id_token");
+    // const potion = {
+    //   described: text,
+    //   images: responseImage,
+    // };
+    // return fetch("https://severfacebook.up.railway.app/api/v1/posts/create", {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //     authorization: "token " + token,
+    //   },
+    //   body: JSON.stringify(potion),
+    // })
+    //   .then((response) => {
+    //     const statusCode = response.status;
+    //     if (statusCode === 200) {
+    //       return (response = response.json());
+    //     } else {
+    //       alert("Đăng bài thất bại");
+    //     }
+    //   })
+    //   .then((response) => {
+    //     if (response !== undefined) {
+    //       // console.log(response.data.described);
+    //       navigation.replace("Home", {
+    //         _id: response.data._id,
+    //       });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   return (
@@ -172,12 +212,20 @@ function AddPost({ navigation }) {
               />
             </View>
             <View>
+              {/* selectedVideo !== null ? (
+              <Video
+                source={{
+                  uri: "https://firebasestorage.googleapis.com/v0/b/otpphone-bc193.appspot.com/o/video%2Fvideo-1675915617937.mp4?alt=media&token=a6437354-fff0-4950-85e3-48999193d904",
+                }}
+                style={styles.video}
+                controls={true}
+              /> */}
               {selectedImages.length === 3 ? (
-                <ThreePicture selectedImages={selectedImages} />
+                <ThreePicture selectedImages={images} />
               ) : selectedImages.length === 2 ? (
-                <TwoPicture selectedImages={selectedImages} />
+                <TwoPicture selectedImages={images} />
               ) : selectedImages.length === 4 ? (
-                <FourPicture selectedImages={selectedImages} />
+                <FourPicture selectedImages={images} />
               ) : selectedImages.length === 1 ? (
                 <Image
                   source={{
@@ -204,7 +252,9 @@ function AddPost({ navigation }) {
                   />
                   <Text>Ảnh/video</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.item}>
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => handleVideoPick()}>
                   <Entypo
                     name="emoji-happy"
                     size={24}
@@ -353,11 +403,21 @@ const styles = StyleSheet.create({
   betweenBody: {
     marginBottom: 10,
     paddingHorizontal: 10,
+    maxHeight: 100,
   },
   textInput: {
     fontSize: 22,
     marginRight: 10,
     fontWeight: "300",
+  },
+  video: {
+    // width: "100%",
+    // height: 400,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
   picture: {
     width: "100%",

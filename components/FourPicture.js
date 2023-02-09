@@ -5,24 +5,12 @@ export default function FourPicture({ selectedImages }) {
   return (
     <View style={styles.container}>
       <View style={styles.groupPicture1}>
-        <Image
-          source={{ uri: selectedImages[0].uri }}
-          style={styles.picture1}
-        />
+        <Image source={{ uri: selectedImages[0] }} style={styles.picture1} />
       </View>
       <View style={styles.groupPicture2}>
-        <Image
-          source={{ uri: selectedImages[1].uri }}
-          style={styles.picture2}
-        />
-        <Image
-          source={{ uri: selectedImages[2].uri }}
-          style={styles.picture3}
-        />
-        <Image
-          source={{ uri: selectedImages[3].uri }}
-          style={styles.picture4}
-        />
+        <Image source={{ uri: selectedImages[1] }} style={styles.picture2} />
+        <Image source={{ uri: selectedImages[2] }} style={styles.picture3} />
+        <Image source={{ uri: selectedImages[3] }} style={styles.picture4} />
       </View>
     </View>
   );
