@@ -11,6 +11,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -25,16 +26,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function ShowInfor({ navigation, route }) {
   const { getInfor } = route.params;
-  // if(getInfor.birthday === undefined){
-
-  // }
   const [coverAvatar, setCoverAvatar] = useState(`${getInfor.cover_image}`);
   const [avatar, setAvatar] = useState(`${getInfor.avatar}`);
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const [text, setText] = useState(getInfor.birthday);
+  const [text, setText] = useState(getInfor.birthday.slice(0, 10));
+  const [loading, setLoading] = useState(false);
 
   const pickAvatar = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -80,6 +79,7 @@ function ShowInfor({ navigation, route }) {
   };
 
   const handleShowInfor = async (values) => {
+    setLoading(true);
     let avatarx;
     let coverAvatarx;
     const token = await AsyncStorage.getItem("id_token");
@@ -122,9 +122,6 @@ function ShowInfor({ navigation, route }) {
         }
       })
       .catch((error) => console.log(error));
-    // handlegetImage(avatar, "avatar");
-    // console.log(avatar);
-    // handlegetImage(coverAvatar, "coverAvatar");
     values = {
       ...values,
       birthday: text,
@@ -172,180 +169,188 @@ function ShowInfor({ navigation, route }) {
       onSubmit={handleShowInfor}>
       {({ handleChange, handleBlur, handleSubmit, values }) => (
         <View style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.contentHeader}>
-              <AntDesign
-                name="arrowleft"
-                size={28}
-                color="black"
-                onPress={() => navigation.goBack()}
-              />
-              <Text style={styles.textHeader}>Chỉnh sửa trang cá nhân</Text>
+          {loading ? (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color="#00ff00" />
             </View>
-          </View>
-          <ScrollView>
-            <View style={styles.content}>
-              <View style={styles.item}>
-                <View style={styles.headerItem}>
-                  <Text style={styles.textHeaderItem}>Ảnh đại diện</Text>
-                  <TouchableOpacity
-                    style={styles.buttonEditItem}
-                    onPress={pickAvatar}>
-                    <Text style={styles.editTextItem}>Chỉnh sửa</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.image}>
-                  {avatar && (
-                    <Image source={{ uri: avatar }} style={styles.avatar} />
-                  )}
+          ) : (
+            <View style={styles.container1}>
+              <View style={styles.header}>
+                <View style={styles.contentHeader}>
+                  <AntDesign
+                    name="arrowleft"
+                    size={28}
+                    color="black"
+                    onPress={() => navigation.goBack()}
+                  />
+                  <Text style={styles.textHeader}>Chỉnh sửa trang cá nhân</Text>
                 </View>
               </View>
-              <View style={styles.item}>
-                <View style={styles.headerItem}>
-                  <Text style={styles.textHeaderItem}>Ảnh bìa</Text>
-                  <TouchableOpacity
-                    style={styles.buttonEditItem}
-                    onPress={pickCoverAvatar}>
-                    <Text style={styles.editTextItem}>Chỉnh sửa</Text>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  {coverAvatar && (
-                    <Image
-                      source={{ uri: coverAvatar }}
-                      style={styles.coverAvatar}
-                    />
-                  )}
-                </View>
-              </View>
-              <View style={styles.item}>
-                <View style={styles.headerItem}>
-                  <Text style={styles.textHeaderItem}>Tiểu sử</Text>
-                  <TouchableOpacity style={styles.buttonEditItem}>
-                    <Text style={styles.editTextItem}>Chỉnh sửa</Text>
-                  </TouchableOpacity>
-                </View>
-                <TextInput
-                  disabled={true}
-                  placeholder="Description"
-                  style={styles.textDecription}
-                  onChangeText={handleChange("description")}
-                  onBlur={handleBlur("description")}
-                  value={values.description}
-                />
-              </View>
-              <View style={styles.item}>
-                <View style={styles.headerItem}>
-                  <Text style={styles.textHeaderItem}>Chi tiết</Text>
-                  <TouchableOpacity style={styles.buttonEditItem}>
-                    <Text style={styles.editTextItem}>Chỉnh sửa</Text>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  <View style={styles.group}>
-                    <MaterialCommunityIcons
-                      name="account-edit"
-                      size={24}
-                      color="#E4E6EB"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      disabled={true}
-                      placeholder="Họ và tên"
-                      style={styles.textInput}
-                      onChangeText={handleChange("username")}
-                      onBlur={handleBlur("username")}
-                      value={values.username}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <FontAwesome
-                      name="home"
-                      size={24}
-                      color="#E4E6EB"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      disabled={true}
-                      placeholder="Thành phố"
-                      style={styles.textInput}
-                      onChangeText={handleChange("city")}
-                      onBlur={handleBlur("city")}
-                      value={values.city}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <FontAwesome
-                      name="map-marker"
-                      size={24}
-                      color="#E4E6EB"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      disabled={true}
-                      placeholder="Quê quán"
-                      style={styles.textInput}
-                      onChangeText={handleChange("address")}
-                      onBlur={handleBlur("address")}
-                      value={values.address}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <Foundation
-                      name="male-female"
-                      size={24}
-                      color="#E4E6EB"
-                      style={styles.icon}
-                    />
-                    <View style={styles.picker}>
-                      <Picker
-                        onValueChange={handleChange("gender")}
-                        onBlur={handleBlur("gender")}
-                        selectedValue={values.gender}>
-                        <Picker.Item
-                          style={styles.pickerItem}
-                          label="male"
-                          value="male"
-                        />
-                        <Picker.Item
-                          style={styles.pickerItem}
-                          label="female"
-                          value="female"
-                        />
-                      </Picker>
+              <ScrollView>
+                <View style={styles.content}>
+                  <View style={styles.item}>
+                    <View style={styles.headerItem}>
+                      <Text style={styles.textHeaderItem}>Ảnh đại diện</Text>
+                      <TouchableOpacity
+                        style={styles.buttonEditItem}
+                        onPress={pickAvatar}>
+                        <Text style={styles.editTextItem}>Chỉnh sửa</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.image}>
+                      {avatar && (
+                        <Image source={{ uri: avatar }} style={styles.avatar} />
+                      )}
                     </View>
                   </View>
-                  <View style={styles.group}>
-                    <FontAwesome
-                      name="birthday-cake"
-                      size={24}
-                      color="#E4E6EB"
-                      style={styles.icon}
-                    />
-                    <TouchableOpacity
-                      onPress={() => showMode("date")}
-                      style={styles.textInput}>
-                      <Text style={styles.textDate}>{text}</Text>
-                    </TouchableOpacity>
-                    {show && (
-                      <DateTimePicker
-                        testID="DateTimePicker"
-                        value={date}
-                        mode={mode}
-                        display="default"
-                        onChange={change}
-                      />
-                    )}
+                  <View style={styles.item}>
+                    <View style={styles.headerItem}>
+                      <Text style={styles.textHeaderItem}>Ảnh bìa</Text>
+                      <TouchableOpacity
+                        style={styles.buttonEditItem}
+                        onPress={pickCoverAvatar}>
+                        <Text style={styles.editTextItem}>Chỉnh sửa</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      {coverAvatar && (
+                        <Image
+                          source={{ uri: coverAvatar }}
+                          style={styles.coverAvatar}
+                        />
+                      )}
+                    </View>
                   </View>
+                  <View style={styles.item}>
+                    <View style={styles.headerItem}>
+                      <Text style={styles.textHeaderItem}>Tiểu sử</Text>
+                      <TouchableOpacity style={styles.buttonEditItem}>
+                        <Text style={styles.editTextItem}>Chỉnh sửa</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <TextInput
+                      disabled={true}
+                      placeholder="Description"
+                      style={styles.textDecription}
+                      onChangeText={handleChange("description")}
+                      onBlur={handleBlur("description")}
+                      value={values.description}
+                    />
+                  </View>
+                  <View style={styles.item}>
+                    <View style={styles.headerItem}>
+                      <Text style={styles.textHeaderItem}>Chi tiết</Text>
+                      <TouchableOpacity style={styles.buttonEditItem}>
+                        <Text style={styles.editTextItem}>Chỉnh sửa</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      <View style={styles.group}>
+                        <MaterialCommunityIcons
+                          name="account-edit"
+                          size={24}
+                          color="#E4E6EB"
+                          style={styles.icon}
+                        />
+                        <TextInput
+                          disabled={true}
+                          placeholder="Họ và tên"
+                          style={styles.textInput}
+                          onChangeText={handleChange("username")}
+                          onBlur={handleBlur("username")}
+                          value={values.username}
+                        />
+                      </View>
+                      <View style={styles.group}>
+                        <FontAwesome
+                          name="home"
+                          size={24}
+                          color="#E4E6EB"
+                          style={styles.icon}
+                        />
+                        <TextInput
+                          disabled={true}
+                          placeholder="Thành phố"
+                          style={styles.textInput}
+                          onChangeText={handleChange("city")}
+                          onBlur={handleBlur("city")}
+                          value={values.city}
+                        />
+                      </View>
+                      <View style={styles.group}>
+                        <FontAwesome
+                          name="map-marker"
+                          size={24}
+                          color="#E4E6EB"
+                          style={styles.icon}
+                        />
+                        <TextInput
+                          disabled={true}
+                          placeholder="Quê quán"
+                          style={styles.textInput}
+                          onChangeText={handleChange("address")}
+                          onBlur={handleBlur("address")}
+                          value={values.address}
+                        />
+                      </View>
+                      <View style={styles.group}>
+                        <Foundation
+                          name="male-female"
+                          size={24}
+                          color="#E4E6EB"
+                          style={styles.icon}
+                        />
+                        <View style={styles.picker}>
+                          <Picker
+                            onValueChange={handleChange("gender")}
+                            onBlur={handleBlur("gender")}
+                            selectedValue={values.gender}>
+                            <Picker.Item
+                              style={styles.pickerItem}
+                              label="male"
+                              value="male"
+                            />
+                            <Picker.Item
+                              style={styles.pickerItem}
+                              label="female"
+                              value="female"
+                            />
+                          </Picker>
+                        </View>
+                      </View>
+                      <View style={styles.group}>
+                        <FontAwesome
+                          name="birthday-cake"
+                          size={24}
+                          color="#E4E6EB"
+                          style={styles.icon}
+                        />
+                        <TouchableOpacity
+                          onPress={() => showMode("date")}
+                          style={styles.textInput}>
+                          <Text style={styles.textDate}>{text}</Text>
+                        </TouchableOpacity>
+                        {show && (
+                          <DateTimePicker
+                            testID="DateTimePicker"
+                            value={date}
+                            mode={mode}
+                            display="default"
+                            onChange={change}
+                          />
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.buttonSave}
+                    onPress={handleSubmit}>
+                    <Text style={styles.textSave}>Lưu</Text>
+                  </TouchableOpacity>
                 </View>
-              </View>
-              <TouchableOpacity
-                style={styles.buttonSave}
-                onPress={handleSubmit}>
-                <Text style={styles.textSave}>Lưu</Text>
-              </TouchableOpacity>
+              </ScrollView>
             </View>
-          </ScrollView>
+          )}
         </View>
       )}
     </Formik>
@@ -359,13 +364,23 @@ const marginFootter = SCREEN_HEIGHT > 750 ? 25 : 45;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
     flex: 1,
+    justifyContent: "center",
+  },
+  container1: {
+    paddingTop: StatusBar.currentHeight,
+    paddingBottom: 50,
+  },
+  loading: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
   },
   header: {
     borderBottomColor: "#000",
     borderBottomWidth: 0.5,
+    marginTop: StatusBar.currentHeight,
   },
   contentHeader: {
     flexDirection: "row",
