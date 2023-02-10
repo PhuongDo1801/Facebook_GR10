@@ -17,8 +17,9 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import HomeItem from "../../components/HomeItem";
 
 function Home({ navigation, route }) {
-  const [getInfor, setGetInfor] = useState({});
+  const [getInfor, setGetInfor] = useState([]);
   const [getListPost, setGetListPost] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const showInfor = async () => {
     const token = await AsyncStorage.getItem("id_token");
@@ -52,7 +53,7 @@ function Home({ navigation, route }) {
   useEffect(() => {
     showInfor();
     showListPost();
-  }, [navigation]);
+  }, [getListPost]);
 
   const showListPost = async () => {
     const token = await AsyncStorage.getItem("id_token");
@@ -111,12 +112,12 @@ function Home({ navigation, route }) {
                 time="{Item.time}"
                 textContent={Item.described}
                 Img={Item.images}
-                avatar={getInfor.avatar}
                 idPost={Item._id}
                 idUser={Item.author}
                 countComments={Item.countComments}
                 countLikes={Item.like}
                 liked={Item.isLike}
+                // videos={Item.videos}
                 page="home"
               />
             </View>

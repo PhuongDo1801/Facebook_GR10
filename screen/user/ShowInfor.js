@@ -28,8 +28,9 @@ function ShowInfor({ navigation, route }) {
   // if(getInfor.birthday === undefined){
 
   // }
-  const [coverAvatar, setCoverAvatar] = useState(getInfor.cover_image);
-  const [avatar, setAvatar] = useState(getInfor.avatar);
+  const [coverAvatar, setCoverAvatar] = useState(`${getInfor.cover_image}`);
+  const [avatar, setAvatar] = useState(`${getInfor.avatar}`);
+
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -78,25 +79,25 @@ function ShowInfor({ navigation, route }) {
     setMode(currentDate);
   };
 
-  const handlegetImage = async (name, img) => {
+  const handleShowInfor = async (values) => {
+    let avatarx;
+    let coverAvatarx;
+    const token = await AsyncStorage.getItem("id_token");
+
     const fileName = "img-" + new Date().getTime();
     const storage = getStorage();
-    const my_ref = ref(storage, `${img}/${fileName}.jpg`);
+    const my_ref = ref(storage, `avatar/${fileName}.jpg`);
     const metadata = {
       contentType: "image/jpeg",
     };
-    const avatarr = await fetch(name);
+    const avatarr = await fetch(avatar);
     const bytes = await avatarr.blob();
     await uploadBytes(my_ref, bytes, metadata)
       .then(async (res) => {
         if (res.metadata) {
           await getDownloadURL(my_ref)
             .then((url) => {
-              if (img === "avatar") {
-                setAvatar(url);
-              } else {
-                setCoverAvatar(url);
-              }
+              avatarx = url;
             })
             .catch((error) => console.log(error));
         } else {
@@ -104,17 +105,31 @@ function ShowInfor({ navigation, route }) {
         }
       })
       .catch((error) => console.log(error));
-  };
 
-  const handleShowInfor = async (values) => {
-    const token = await AsyncStorage.getItem("id_token");
-    handlegetImage(avatar, "avatar");
-    handlegetImage(coverAvatar, "coverAvatar");
+    const my_reff = ref(storage, `coverAvatar/${fileName}.jpg`);
+    const coverAvatarr = await fetch(coverAvatar);
+    const bytess = await coverAvatarr.blob();
+    await uploadBytes(my_reff, bytess, metadata)
+      .then(async (res) => {
+        if (res.metadata) {
+          await getDownloadURL(my_reff)
+            .then((url) => {
+              coverAvatarx = url;
+            })
+            .catch((error) => console.log(error));
+        } else {
+          console.log("UPLOAD FILE ERROR!");
+        }
+      })
+      .catch((error) => console.log(error));
+    // handlegetImage(avatar, "avatar");
+    // console.log(avatar);
+    // handlegetImage(coverAvatar, "coverAvatar");
     values = {
       ...values,
       birthday: text,
-      avatar: avatar,
-      cover_image: coverAvatar,
+      avatar: avatarx,
+      cover_image: coverAvatarx,
     };
     return fetch("https://severfacebook.up.railway.app/api/v1/users/edit", {
       method: "POST",
@@ -135,7 +150,7 @@ function ShowInfor({ navigation, route }) {
       })
       .then((response) => {
         if (response !== undefined) {
-          alert("Cập nhật thành công");
+          alert("Chỉnh sửa thành công");
           navigation.replace("Information");
         }
       })

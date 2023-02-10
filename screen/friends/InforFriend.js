@@ -24,7 +24,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function InforFriend({ navigation, route }) {
-  const { username, idUser, avatar, cover_image } = route.params;
+  const { username, idUser, avatar, cover_image, text } = route.params;
   const [getInfor, setGetInfor] = useState({});
   const [getListPost, setGetListPost] = useState([]);
 
@@ -136,7 +136,7 @@ export default function InforFriend({ navigation, route }) {
             <Text style={styles.textFullName}>{username}</Text>
             <View style={styles.button}>
               <TouchableOpacity style={styles.buttonConfirm}>
-                <Text style={styles.textButtonVideo}>Bạn bè</Text>
+                <Text style={styles.textButtonVideo}>{text}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.buttonChat}>
                 <FontAwesome5
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: 80,
   },
   header: {
-    paddingTop: StatusBar.currentHeight,
+    paddingTop: StatusBar.currentHeight + 10,
     backgroundColor: "#fff",
     borderBottomColor: "#000",
     borderBottomWidth: 0.5,

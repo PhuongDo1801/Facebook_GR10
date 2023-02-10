@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   StyleSheet,
@@ -9,9 +10,56 @@ import {
   Dimensions,
 } from "react-native";
 
-export default function FriendItem({ avatar, username, mutual, text }) {
+export default function FriendItem({
+  avatar,
+  username,
+  mutual,
+  id,
+  cover_image,
+  text,
+}) {
+  const navigation = useNavigation();
+  const [request, setRequest] = useState();
+
+  const check = async () => {
+    const token = await AsyncStorage.getItem("id_token");
+    return fetch(
+      `https://severfacebook.up.railway.app/api/v1/friends/status/${id}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          authorization: "token " + token,
+        },
+        body: JSON.stringify(),
+      }
+    )
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert("Load lỗi");
+        }
+      })
+      .then((response) => {
+        if (response !== undefined) {
+          setRequest(response.data.status);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    check();
+  }, [request]);
+
   const confirm = async (values) => {
     let options = {
+      user_id: id,
       is_accept: values,
     };
     const token = await AsyncStorage.getItem("id_token");
@@ -30,6 +78,7 @@ export default function FriendItem({ avatar, username, mutual, text }) {
       .then((response) => {
         const statusCode = response.status;
         if (statusCode === 200) {
+          navigation.navigate("Friend");
         } else {
           alert("Sever lag");
         }
@@ -39,23 +88,79 @@ export default function FriendItem({ avatar, username, mutual, text }) {
       });
   };
 
+  const addFriend = async () => {
+    let options = {
+      user_id: id,
+    };
+    const token = await AsyncStorage.getItem("id_token");
+    return fetch(
+      "https://severfacebook.up.railway.app/api/v1/friends/set-request-friend ",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          authorization: "token " + token,
+        },
+        body: JSON.stringify(options),
+      }
+    )
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          setRequest(true);
+        } else {
+          alert("Sever lag");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handlRequest = () => {
+    if (text === "Thêm bạn bè") {
+      addFriend();
+    } else {
+      confirm("1");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.itemFriend}>
-        <Image source={{ uri: avatar }} style={styles.image} />
+        <TouchableOpacity
+          style={styles.content}
+          onPress={() =>
+            navigation.navigate("InforFriend", {
+              avatar: avatar,
+              idUser: id,
+              username: username,
+              cover_image: cover_image,
+              text: text,
+            })
+          }>
+          <Image source={{ uri: avatar }} style={styles.image} />
+        </TouchableOpacity>
         <View style={styles.user}>
           <Text style={styles.textName}>{username}</Text>
           {/* <Text style={styles.textFr}>{mutual} bạn chung</Text> */}
-          <View style={styles.areaButton}>
-            <TouchableOpacity
-              style={styles.buttonA}
-              onPress={() => confirm("1")}>
-              <Text style={styles.textA}>{text}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonB} onPress={() => confirm(1)}>
-              <Text style={styles.textB}>Xóa</Text>
-            </TouchableOpacity>
-          </View>
+          {request === "sent" ? (
+            <View style={styles.button}>
+              <Text style={styles.textButton}>Đã gửi yêu cầu</Text>
+            </View>
+          ) : (
+            <View style={styles.areaButton}>
+              <TouchableOpacity
+                style={styles.buttonA}
+                onPress={() => handlRequest()}>
+                <Text style={styles.textA}>{text}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonB}>
+                <Text style={styles.textB}>Xóa</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     </View>
@@ -91,6 +196,19 @@ const styles = StyleSheet.create({
   },
   areaButton: {
     flexDirection: "row",
+  },
+  button: {
+    marginVertical: 5,
+    backgroundColor: "#ccc",
+    paddingVertical: 8,
+
+    alignItems: "center",
+    borderRadius: 8,
+    width: SCREEN_WEIGHT - 130,
+  },
+  textButton: {
+    fontSize: 18,
+    textAlign: "center",
   },
   buttonA: {
     marginVertical: 5,

@@ -14,7 +14,7 @@ import {
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { ImagePicker } from "expo-image-multiple-picker";
 import * as ImagePick from "expo-image-picker";
-// import Video from "react-native-video";
+import { Video } from "expo-av";
 import ThreePicture from "../../components/ThreePicture";
 import TwoPicture from "../../components/TwoPicture";
 import FourPicture from "../../components/FourPicture";
@@ -29,6 +29,7 @@ function AddPost({ navigation }) {
   const [vertical, setVertical] = useState(false);
   const [showImagePicker, setShowImagePicker] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [shouldPlay, setShouldPlay] = useState(true);
   const [text, onChangeText] = useState("");
   const [loading, setLoaing] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -119,40 +120,41 @@ function AddPost({ navigation }) {
         .catch((error) => console.log(error));
     }
 
-    // setLoaing(true);
-    // const token = await AsyncStorage.getItem("id_token");
-    // const potion = {
-    //   described: text,
-    //   images: responseImage,
-    // };
-    // return fetch("https://severfacebook.up.railway.app/api/v1/posts/create", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //     authorization: "token " + token,
-    //   },
-    //   body: JSON.stringify(potion),
-    // })
-    //   .then((response) => {
-    //     const statusCode = response.status;
-    //     if (statusCode === 200) {
-    //       return (response = response.json());
-    //     } else {
-    //       alert("Đăng bài thất bại");
-    //     }
-    //   })
-    //   .then((response) => {
-    //     if (response !== undefined) {
-    //       // console.log(response.data.described);
-    //       navigation.replace("Home", {
-    //         _id: response.data._id,
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+    setLoaing(true);
+    const token = await AsyncStorage.getItem("id_token");
+    const potion = {
+      described: text,
+      images: responseImage,
+      videos: selectedVideo,
+    };
+    return fetch("https://severfacebook.up.railway.app/api/v1/posts/create", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: "token " + token,
+      },
+      body: JSON.stringify(potion),
+    })
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert("Đăng bài thất bại");
+        }
+      })
+      .then((response) => {
+        if (response !== undefined) {
+          // console.log(response.data.described);
+          navigation.replace("Home", {
+            _id: response.data._id,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -212,15 +214,26 @@ function AddPost({ navigation }) {
               />
             </View>
             <View>
-              {/* selectedVideo !== null ? (
-              <Video
-                source={{
-                  uri: "https://firebasestorage.googleapis.com/v0/b/otpphone-bc193.appspot.com/o/video%2Fvideo-1675915617937.mp4?alt=media&token=a6437354-fff0-4950-85e3-48999193d904",
-                }}
-                style={styles.video}
-                controls={true}
-              /> */}
-              {selectedImages.length === 3 ? (
+              {selectedVideo !== null ? (
+                <View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShouldPlay(!shouldPlay);
+                    }}>
+                    <Video
+                      source={{
+                        uri: selectedVideo,
+                      }}
+                      rate={1.0}
+                      volume={1.0}
+                      isMuted={false}
+                      shouldPlay={shouldPlay}
+                      isLooping={true}
+                      style={styles.video}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : selectedImages.length === 3 ? (
                 <ThreePicture selectedImages={images} />
               ) : selectedImages.length === 2 ? (
                 <TwoPicture selectedImages={images} />
@@ -261,7 +274,7 @@ function AddPost({ navigation }) {
                     color="#F5C33B"
                     style={styles.icon}
                   />
-                  <Text>Cảm xúc/Hoạt động</Text>
+                  <Text>Video</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.item}>
                   <Entypo
@@ -411,13 +424,8 @@ const styles = StyleSheet.create({
     fontWeight: "300",
   },
   video: {
-    // width: "100%",
-    // height: 400,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    width: 500,
+    height: 1000,
   },
   picture: {
     width: "100%",

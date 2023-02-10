@@ -13,6 +13,7 @@ import TwoPicture from "./TwoPicture";
 import ThreePicture from "./ThreePicture";
 import FourPicture from "./FourPicture";
 import DeletePost from "./DeletePost";
+import { Video } from "expo-av";
 
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -31,6 +32,7 @@ export default function HomeItem({
   countComments,
   countLikes,
   liked,
+  // videos,
   page,
 }) {
   const [getInfor, setGetInfor] = useState({});
@@ -38,8 +40,8 @@ export default function HomeItem({
   const [modalVisible, setModalVisible] = useState(false);
   const [like, setLike] = useState(liked);
   const [showComment, setShowComment] = useState(false);
+  const [shouldPlay, setShouldPlay] = useState(true);
   const navigation = useNavigation();
-
   const handleLikePost = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
@@ -112,7 +114,7 @@ export default function HomeItem({
     <View style={styles.homeItem}>
       {modalVisible && (
         <DeletePost
-          id={idPost}
+          idPost={idPost}
           navigation={navigation}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
@@ -158,7 +160,7 @@ export default function HomeItem({
                   described: textContent,
                   Img: Img,
                   avatar: getInfor.avatar,
-                  id: idPost,
+                  id: id,
                 })
               }
             />
@@ -173,7 +175,7 @@ export default function HomeItem({
         )}
       </View>
       <View style={styles.content}>
-        {Img === null ? (
+        {Img.length === 0 ? (
           textContent.split(" ").length < 18 ? (
             <View style={styles.noImage}>
               <Text style={styles.textNoImage}>{textContent}</Text>
@@ -221,7 +223,7 @@ export default function HomeItem({
         <View style={styles.headerFooter}>
           <View style={styles.countLike}>
             <EvilIcons name="like" size={22} color="black" />
-            <Text>{countLikes.length}</Text>
+            <Text>1</Text>
           </View>
           <Text style={styles.textComment}>{countComments} bình luận</Text>
         </View>
@@ -300,7 +302,7 @@ const styles = StyleSheet.create({
   textNoImage: {
     textAlign: "center",
     fontSize: 35,
-    color: "#f6b26b",
+    color: "#fff",
     marginHorizontal: 15,
   },
   textContent: {
@@ -311,6 +313,10 @@ const styles = StyleSheet.create({
   groupImage: {
     width: "100%",
     height: SCREEN_HEIGHT * 0.35,
+  },
+  video: {
+    width: 500,
+    height: 1000,
   },
   picture: {
     width: "100%",

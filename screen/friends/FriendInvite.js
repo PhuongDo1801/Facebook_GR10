@@ -81,10 +81,13 @@ export default function FriendInvite({ route }) {
               {listFriendInvite.map((Friend, index) => (
                 <View style={styles.friend} key={index}>
                   <FriendItem
+                    cover_image={Friend.cover_image}
                     avatar={Friend.avatar}
                     mutual="1"
-                    username={Friend.fullname}
+                    username={Friend.username}
                     text={"Chấp nhận"}
+                    id={Friend._id}
+                    time="{Item.time}"
                   />
                 </View>
               ))}
