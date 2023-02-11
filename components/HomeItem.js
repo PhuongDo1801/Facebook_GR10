@@ -125,7 +125,7 @@ export default function HomeItem({
     } else if (timeDiffInMinutes < 1440) {
       const hours = Math.floor(timeDiffInMinutes / 60);
       const minutes = (timeDiffInMinutes % 60).toFixed(0);
-      result = `${hours} giờ ${minutes} phút trước`;
+      result = `${hours} giờ trước`;
     } else {
       const days = Math.floor(timeDiffInMinutes / 1440);
       result = `${days} ngày trước`;
