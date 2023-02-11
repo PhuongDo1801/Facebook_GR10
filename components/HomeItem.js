@@ -197,7 +197,7 @@ export default function HomeItem({
                   described: textContent,
                   Img: Img,
                   avatar: getInfor.avatar,
-                  id: id,
+                  id: idPost,
                 })
               }
             />
