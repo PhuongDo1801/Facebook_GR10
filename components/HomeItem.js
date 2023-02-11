@@ -229,30 +229,53 @@ export default function HomeItem({
           )
         ) : (
           <View>
-            <Text
-              style={styles.textContent}
-              numberOfLines={showMore ? 2 : 0}
-              onPress={() => setShowMore(!showMore)}>
-              {textContent}
-            </Text>
-            <View>
-              {Img.length === 3 ? (
-                <ThreePicture selectedImages={Img} />
-              ) : Img.length === 2 ? (
-                <TwoPicture selectedImages={Img} />
-              ) : Img.length === 4 ? (
-                <FourPicture selectedImages={Img} />
-              ) : Img.length === 1 ? (
-                <Image
-                  source={{
-                    uri: Img[0],
-                  }}
-                  style={styles.picture}
-                />
-              ) : (
-                ""
-              )}
-            </View>
+            {textContent === "" ? (
+              <View>
+                {Img.length === 3 ? (
+                  <ThreePicture selectedImages={Img} />
+                ) : Img.length === 2 ? (
+                  <TwoPicture selectedImages={Img} />
+                ) : Img.length === 4 ? (
+                  <FourPicture selectedImages={Img} />
+                ) : Img.length === 1 ? (
+                  <Image
+                    source={{
+                      uri: Img[0],
+                    }}
+                    style={styles.picture}
+                  />
+                ) : (
+                  ""
+                )}
+              </View>
+            ) : (
+              <View>
+                <Text
+                  style={styles.textContent}
+                  numberOfLines={showMore ? 2 : 0}
+                  onPress={() => setShowMore(!showMore)}>
+                  {textContent}
+                </Text>
+                <View>
+                  {Img.length === 3 ? (
+                    <ThreePicture selectedImages={Img} />
+                  ) : Img.length === 2 ? (
+                    <TwoPicture selectedImages={Img} />
+                  ) : Img.length === 4 ? (
+                    <FourPicture selectedImages={Img} />
+                  ) : Img.length === 1 ? (
+                    <Image
+                      source={{
+                        uri: Img[0],
+                      }}
+                      style={styles.picture}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </View>
+              </View>
+            )}
           </View>
         )}
       </View>
