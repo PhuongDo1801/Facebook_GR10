@@ -21,6 +21,7 @@ import ShowInfor from "./screen/user/ShowInfor";
 import EditPost from "./screen/posts/EditPost";
 import InforFriend from "./screen/friends/InforFriend";
 import Chat from "./screen/messenger/Chat";
+import ChangePass from "./screen/menu/ChangePass";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -47,6 +48,7 @@ export default function App() {
         <Stack.Screen name="EditPost" component={EditPost} />
         <Stack.Screen name="InforFriend" component={InforFriend} />
         <Stack.Screen name="Chat" component={Chat} />
+        <Stack.Screen name="ChangePass" component={ChangePass} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
