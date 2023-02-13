@@ -24,7 +24,8 @@ const SocketClient = ({ route }) => {
   const { avatar, username, receiverId, senderId, id_token } = route.params;
   const [text, onChangeText] = useState("");
   const [saveMess, setSaveMess] = useState([]);
-  const [getIdChat, setGetIdChat] = useState();
+  const [getIdChat, setGetIdChat] = useState([]);
+  const [count, setCount] = useState(0);
 
   const socket = io("https://facebookapp-production.up.railway.app");
 
@@ -32,8 +33,8 @@ const SocketClient = ({ route }) => {
     setSaveMess((state) => [
       ...state,
       {
-        id: senderId,
-        text: text,
+        senderId: senderId,
+        content: text,
       },
     ]);
     socket.emit("chatmessage", {
@@ -44,70 +45,54 @@ const SocketClient = ({ route }) => {
     });
   };
 
-  // const getChat = async () => {
-  //   const token = await AsyncStorage.getItem("id_token");
-  //   return fetch(`https://severfacebook.up.railway.app/api/v1/chats/getMessagesbyfriendId/${receiverId}`, {
-  //     method: "GET",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //       authorization: "token " + token,
-  //     },
-  //     body: JSON.stringify(),
-  //   })
-  //     .then((response) => {
-  //       const statusCode = response.status;
-  //       if (statusCode === 200) {
-  //         return (response = response.json());
-  //       } else {
-  //         alert("Load lỗi");
-  //       }
-  //     })
-  //     .then((response) => {
-  //       if (response !== undefined) {
-  //         setGetIdChat(response);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
+  const getChat = async () => {
+    const token = await AsyncStorage.getItem("id_token");
+    return fetch(
+      `https://severfacebook.up.railway.app/api/v1/chats/getMessagesbyfriendId/${receiverId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          authorization: "token " + token,
+        },
+        body: JSON.stringify(),
+      }
+    )
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert("Load lỗi");
+        }
+      })
+      .then((response) => {
+        if (response !== undefined) {
+          setSaveMess(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
-    console.log(getIdChat);
-  //   socket.on({ senderId }, (data) => {
-  //     console.log(data);
-  //   });
+    getChat();
   }, []);
 
-  // const showMess = async () => {
-  //   const token = await AsyncStorage.getItem("id_token");
-  //   return fetch(`https://severfacebook.up.railway.app/api/v1/chats/getMessages/{}`, {
-  //     method: "GET",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //       authorization: "token " + token,
-  //     },
-  //     body: JSON.stringify(),
-  //   })
-  //     .then((response) => {
-  //       const statusCode = response.status;
-  //       if (statusCode === 200) {
-  //         return (response = response.json());
-  //       } else {
-  //         alert("Load lỗi");
-  //       }
-  //     })
-  //     .then((response) => {
-  //       if (response !== undefined) {
-  //         setGetInfor(response.data);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
+  useEffect(() => {
+    socket.on(`${senderId}`, (data) => {
+      console.log(data);
+      setSaveMess((state) => [
+        ...state,
+        {
+          senderId: data.senderId,
+          content: data.content,
+        },
+      ]);
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -142,27 +127,33 @@ const SocketClient = ({ route }) => {
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: "flex-end",
-          marginBottom: 70,
+          marginBottom: 0,
         }}>
-        {saveMess.map((ItemMess, index) => (
-          <View style={styles.itemMess} key={index}>
-            {ItemMess.id === senderId ? (
-              <View style={styles.contentSend}>
-                <Text style={styles.textContent}>{ItemMess.text}</Text>
-              </View>
-            ) : (
-              <View style={styles.contentRecied}>
-                <Image
-                  style={styles.avatarChat}
-                  source={{
-                    uri: avatar,
-                  }}
-                />
-                <Text style={styles.textContentRecied}>{ItemMess.text}</Text>
-              </View>
-            )}
-          </View>
-        ))}
+        <View style={styles.body}>
+          {saveMess.map((ItemMess, index) => (
+            <View style={styles.itemMess} key={index}>
+              {ItemMess.senderId === senderId ? (
+                <View style={styles.contentSend}>
+                  <Text style={styles.textContent}>{ItemMess.content}</Text>
+                </View>
+              ) : (
+                <View style={styles.group}>
+                  <Image
+                    style={styles.avatarChat}
+                    source={{
+                      uri: avatar,
+                    }}
+                  />
+                  <View style={styles.contentRecied}>
+                    <Text style={styles.textContentRecied}>
+                      {ItemMess.content}
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </View>
+          ))}
+        </View>
       </ScrollView>
       <View style={styles.footer}>
         <TextInput
@@ -226,7 +217,10 @@ const styles = StyleSheet.create({
   },
   //body
   body: {
-    // height: SCREEN_HEIGHT - 50,
+    // height: SCREEN_HEIGHT,
+    flexGrow: 1,
+    justifyContent: "flex-end",
+    paddingBottom: 70,
   },
   itemMess: {},
   contentSend: {
@@ -239,11 +233,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   contentRecied: {
-    padding: 5,
+    paddingHorizontal: 7,
     backgroundColor: "#E4E6EB",
     alignSelf: "flex-start",
+    paddingVertical: 6,
     borderRadius: 8,
-    margin: 10,
+    marginLeft: 5,
+    marginTop: 1,
+  },
+  group: {
+    flexDirection: "row",
+  },
+  avatarChat: {
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    marginLeft: 10,
   },
   textContent: {
     color: "#fff",

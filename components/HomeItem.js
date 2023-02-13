@@ -47,6 +47,7 @@ export default function HomeItem({
   const [shouldPlay, setShouldPlay] = useState(true);
   const [timeNow, setTimeNow] = useState(null);
   const navigation = useNavigation();
+
   const handleLikePost = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
@@ -110,7 +111,7 @@ export default function HomeItem({
         console.error(error);
       });
   };
-
+  // console.log(videos);
   // useEffect(() => {
   //   showInfor();
   // }, [navigation]);
@@ -135,7 +136,7 @@ export default function HomeItem({
     }
     return result;
   };
-
+  // console.log(Img);
   return (
     <View style={styles.homeItem}>
       {modalVisible && (
@@ -214,8 +215,76 @@ export default function HomeItem({
           </View>
         )}
       </View>
+
       <View style={styles.content}>
-        {videos !== null ? (
+        {videos === null || videos === [] || videos.length === 0 ? (
+          Img.length === 0 ? (
+            textContent.split(" ").length < 18 ? (
+              <View style={styles.noImage}>
+                <Text style={styles.textNoImage}>{textContent}</Text>
+              </View>
+            ) : (
+              <View>
+                <Text
+                  style={styles.textContent}
+                  numberOfLines={showMore ? 2 : 0}
+                  onPress={() => setShowMore(!showMore)}>
+                  {textContent}
+                </Text>
+              </View>
+            )
+          ) : (
+            <View>
+              {textContent === "" ? (
+                <View>
+                  {Img.length === 3 ? (
+                    <ThreePicture selectedImages={Img} />
+                  ) : Img.length === 2 ? (
+                    <TwoPicture selectedImages={Img} />
+                  ) : Img.length === 4 ? (
+                    <FourPicture selectedImages={Img} />
+                  ) : Img.length === 1 ? (
+                    <Image
+                      source={{
+                        uri: Img[0],
+                      }}
+                      style={styles.picture}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </View>
+              ) : (
+                <View>
+                  <Text
+                    style={styles.textContent}
+                    numberOfLines={showMore ? 2 : 0}
+                    onPress={() => setShowMore(!showMore)}>
+                    {textContent}
+                  </Text>
+                  <View>
+                    {Img.length === 3 ? (
+                      <ThreePicture selectedImages={Img} />
+                    ) : Img.length === 2 ? (
+                      <TwoPicture selectedImages={Img} />
+                    ) : Img.length === 4 ? (
+                      <FourPicture selectedImages={Img} />
+                    ) : Img.length === 1 ? (
+                      <Image
+                        source={{
+                          uri: Img[0],
+                        }}
+                        style={styles.picture}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </View>
+                </View>
+              )}
+            </View>
+          )
+        ) : (
           <View>
             <Text
               style={styles.textContent}
@@ -239,71 +308,6 @@ export default function HomeItem({
                 style={styles.video}
               />
             </TouchableOpacity>
-          </View>
-        ) : Img.length === 0 ? (
-          textContent.split(" ").length < 18 ? (
-            <View style={styles.noImage}>
-              <Text style={styles.textNoImage}>{textContent}</Text>
-            </View>
-          ) : (
-            <View>
-              <Text
-                style={styles.textContent}
-                numberOfLines={showMore ? 2 : 0}
-                onPress={() => setShowMore(!showMore)}>
-                {textContent}
-              </Text>
-            </View>
-          )
-        ) : (
-          <View>
-            {textContent === "" ? (
-              <View>
-                {Img.length === 3 ? (
-                  <ThreePicture selectedImages={Img} />
-                ) : Img.length === 2 ? (
-                  <TwoPicture selectedImages={Img} />
-                ) : Img.length === 4 ? (
-                  <FourPicture selectedImages={Img} />
-                ) : Img.length === 1 ? (
-                  <Image
-                    source={{
-                      uri: Img[0],
-                    }}
-                    style={styles.picture}
-                  />
-                ) : (
-                  ""
-                )}
-              </View>
-            ) : (
-              <View>
-                <Text
-                  style={styles.textContent}
-                  numberOfLines={showMore ? 2 : 0}
-                  onPress={() => setShowMore(!showMore)}>
-                  {textContent}
-                </Text>
-                <View>
-                  {Img.length === 3 ? (
-                    <ThreePicture selectedImages={Img} />
-                  ) : Img.length === 2 ? (
-                    <TwoPicture selectedImages={Img} />
-                  ) : Img.length === 4 ? (
-                    <FourPicture selectedImages={Img} />
-                  ) : Img.length === 1 ? (
-                    <Image
-                      source={{
-                        uri: Img[0],
-                      }}
-                      style={styles.picture}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </View>
-              </View>
-            )}
           </View>
         )}
       </View>

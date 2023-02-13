@@ -113,7 +113,18 @@ function Home({ navigation, route }) {
               <Text style={styles.textSearch}>Bạn đang nghĩ gì?</Text>
             </TouchableOpacity>
           </View>
-          <FontAwesome5 name="images" size={24} color="green" />
+          <FontAwesome5
+            name="images"
+            size={24}
+            color="green"
+            onPress={() =>
+              navigation.navigate("AddPost", {
+                avatar: getInfor.avatar,
+                username: getInfor.username,
+                textt: "camera",
+              })
+            }
+          />
         </View>
         {getListPost
           .map((Item, index) => (
