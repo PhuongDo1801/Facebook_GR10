@@ -74,7 +74,6 @@ function AddPost({ navigation, route }) {
       console.log(e);
     }
   };
-  console.log(selectedVideo);
 
   const Uploadvideo = async () => {
     const fileName = "video-" + new Date().getTime();
@@ -94,7 +93,9 @@ function AddPost({ navigation, route }) {
   };
 
   const handlePost = async () => {
-    // Uploadvideo();
+    if (selectedVideo !== []) {
+      Uploadvideo();
+    }
     let responseImage = [];
     for (let i = 0; i < selectedImages.length; i++) {
       const fileName = "img-" + new Date().getTime();

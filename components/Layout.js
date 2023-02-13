@@ -179,11 +179,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   iconHeader: {
+    width: 31,
+    height: 31,
     alignItems: "center",
     backgroundColor: "#ccc",
     borderRadius: 1000,
     marginRight: 5,
     padding: 5,
+    justifyContent: "center",
   },
   body: {
     flexDirection: "row",

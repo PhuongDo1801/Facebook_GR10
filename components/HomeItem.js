@@ -30,16 +30,19 @@ export default function HomeItem({
   Img,
   idPost,
   idUser,
+  cover_image,
+  avatar,
+  username,
   countComments,
   countLikes,
-  liked,
-  // videos,
+  idAccount,
+  videos,
   page,
 }) {
   const [getInfor, setGetInfor] = useState({});
   const [showMore, setShowMore] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [like, setLike] = useState(liked);
+  const [like, setLike] = useState(countLikes.includes(idAccount));
   const [showComment, setShowComment] = useState(false);
   const [shouldPlay, setShouldPlay] = useState(true);
   const [timeNow, setTimeNow] = useState(null);
@@ -108,9 +111,9 @@ export default function HomeItem({
       });
   };
 
-  useEffect(() => {
-    showInfor();
-  }, [navigation]);
+  // useEffect(() => {
+  //   showInfor();
+  // }, [navigation]);
 
   const handleTime = (time) => {
     const createdAt = new Date(time);
@@ -149,8 +152,8 @@ export default function HomeItem({
           navigation={navigation}
           showComment={showComment}
           setShowComment={setShowComment}
-          username={getInfor.username}
-          avatar={getInfor.avatar}
+          username={username}
+          avatar={avatar}
         />
       )}
       <View style={styles.header}>
@@ -159,10 +162,10 @@ export default function HomeItem({
           onPress={() =>
             page === "home"
               ? navigation.navigate("InforFriend", {
-                  avatar: getInfor.avatar,
-                  idUser: getInfor._id,
-                  username: getInfor.username,
-                  cover_image: getInfor.cover_image,
+                  avatar: avatar,
+                  idUser: idUser,
+                  username: username,
+                  cover_image: cover_image,
                   text: "Bạn bè",
                 })
               : ""
@@ -170,13 +173,13 @@ export default function HomeItem({
           <View style={styles.imageAvater}>
             <Image
               source={{
-                uri: getInfor.avatar,
+                uri: avatar,
               }}
               style={styles.avatar}
             />
           </View>
           <View style={styles.infor}>
-            <Text style={styles.textInfor}>{getInfor.username}</Text>
+            <Text style={styles.textInfor}>{username}</Text>
             <View>
               <Text>{handleTime(time)}</Text>
             </View>
@@ -193,10 +196,10 @@ export default function HomeItem({
               style={styles.dotSetting}
               onPress={() =>
                 navigation.navigate("EditPost", {
-                  name: getInfor.username,
+                  name: username,
                   described: textContent,
                   Img: Img,
-                  avatar: getInfor.avatar,
+                  avatar: avatar,
                   id: idPost,
                 })
               }
@@ -212,7 +215,32 @@ export default function HomeItem({
         )}
       </View>
       <View style={styles.content}>
-        {Img.length === 0 ? (
+        {videos !== null ? (
+          <View>
+            <Text
+              style={styles.textContent}
+              numberOfLines={showMore ? 2 : 0}
+              onPress={() => setShowMore(!showMore)}>
+              {textContent}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setShouldPlay(!shouldPlay);
+              }}>
+              <Video
+                source={{
+                  uri: videos[0],
+                }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                shouldPlay={shouldPlay}
+                isLooping={true}
+                style={styles.video}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : Img.length === 0 ? (
           textContent.split(" ").length < 18 ? (
             <View style={styles.noImage}>
               <Text style={styles.textNoImage}>{textContent}</Text>
@@ -229,38 +257,63 @@ export default function HomeItem({
           )
         ) : (
           <View>
-            <Text
-              style={styles.textContent}
-              numberOfLines={showMore ? 2 : 0}
-              onPress={() => setShowMore(!showMore)}>
-              {textContent}
-            </Text>
-            <View>
-              {Img.length === 3 ? (
-                <ThreePicture selectedImages={Img} />
-              ) : Img.length === 2 ? (
-                <TwoPicture selectedImages={Img} />
-              ) : Img.length === 4 ? (
-                <FourPicture selectedImages={Img} />
-              ) : Img.length === 1 ? (
-                <Image
-                  source={{
-                    uri: Img[0],
-                  }}
-                  style={styles.picture}
-                />
-              ) : (
-                ""
-              )}
-            </View>
+            {textContent === "" ? (
+              <View>
+                {Img.length === 3 ? (
+                  <ThreePicture selectedImages={Img} />
+                ) : Img.length === 2 ? (
+                  <TwoPicture selectedImages={Img} />
+                ) : Img.length === 4 ? (
+                  <FourPicture selectedImages={Img} />
+                ) : Img.length === 1 ? (
+                  <Image
+                    source={{
+                      uri: Img[0],
+                    }}
+                    style={styles.picture}
+                  />
+                ) : (
+                  ""
+                )}
+              </View>
+            ) : (
+              <View>
+                <Text
+                  style={styles.textContent}
+                  numberOfLines={showMore ? 2 : 0}
+                  onPress={() => setShowMore(!showMore)}>
+                  {textContent}
+                </Text>
+                <View>
+                  {Img.length === 3 ? (
+                    <ThreePicture selectedImages={Img} />
+                  ) : Img.length === 2 ? (
+                    <TwoPicture selectedImages={Img} />
+                  ) : Img.length === 4 ? (
+                    <FourPicture selectedImages={Img} />
+                  ) : Img.length === 1 ? (
+                    <Image
+                      source={{
+                        uri: Img[0],
+                      }}
+                      style={styles.picture}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </View>
+              </View>
+            )}
           </View>
         )}
       </View>
       <View style={styles.footer}>
         <View style={styles.headerFooter}>
           <View style={styles.countLike}>
-            <EvilIcons name="like" size={22} color="black" />
-            <Text>1</Text>
+            <Text>{countLikes.length}</Text>
+            <View style={styles.iconLike}>
+              <EvilIcons name="like" size={16} color="#fff" />
+            </View>
           </View>
           <Text style={styles.textComment}>{countComments} bình luận</Text>
         </View>
@@ -358,7 +411,7 @@ const styles = StyleSheet.create({
   },
   video: {
     width: 500,
-    height: 1000,
+    height: 270,
   },
   picture: {
     width: "100%",
@@ -377,6 +430,15 @@ const styles = StyleSheet.create({
   },
   countLike: {
     flexDirection: "row",
+    alignItems: "center",
+  },
+  iconLike: {
+    backgroundColor: "#3578E5",
+    paddingVertical: 2,
+    paddingHorizontal: 1,
+    marginLeft: 4,
+    borderRadius: 50,
+    alignItems: "center",
   },
   bottomFooter: {
     flexDirection: "row",
