@@ -24,6 +24,7 @@ const SocketClient = ({ route }) => {
   const { avatar, username, receiverId, senderId, id_token } = route.params;
   const [text, onChangeText] = useState("");
   const [saveMess, setSaveMess] = useState([]);
+  const [getIdChat, setGetIdChat] = useState();
 
   const socket = io("https://facebookapp-production.up.railway.app");
 
@@ -43,11 +44,41 @@ const SocketClient = ({ route }) => {
     });
   };
 
-  // useEffect(() => {
+  // const getChat = async () => {
+  //   const token = await AsyncStorage.getItem("id_token");
+  //   return fetch(`https://severfacebook.up.railway.app/api/v1/chats/getMessagesbyfriendId/${receiverId}`, {
+  //     method: "GET",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //       authorization: "token " + token,
+  //     },
+  //     body: JSON.stringify(),
+  //   })
+  //     .then((response) => {
+  //       const statusCode = response.status;
+  //       if (statusCode === 200) {
+  //         return (response = response.json());
+  //       } else {
+  //         alert("Load lỗi");
+  //       }
+  //     })
+  //     .then((response) => {
+  //       if (response !== undefined) {
+  //         setGetIdChat(response);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+  useEffect(() => {
+    console.log(getIdChat);
   //   socket.on({ senderId }, (data) => {
   //     console.log(data);
   //   });
-  // }, [socket]);
+  }, []);
 
   // const showMess = async () => {
   //   const token = await AsyncStorage.getItem("id_token");

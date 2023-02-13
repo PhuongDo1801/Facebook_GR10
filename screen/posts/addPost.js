@@ -75,26 +75,24 @@ function AddPost({ navigation, route }) {
     }
   };
 
-  const Uploadvideo = async () => {
-    const fileName = "video-" + new Date().getTime();
-    const storage = getStorage();
-    const my_ref = ref(storage, `video/${fileName}.mp4`);
-    const video = await fetch(selectedVideo);
-    const bytes = await video.blob();
-    await uploadBytes(my_ref, bytes)
-      .then(async (res) => {
-        await getDownloadURL(my_ref)
-          .then((url) => {
-            setSelectedVideo(url);
-          })
-          .catch((error) => console.log(error));
-      })
-      .catch((error) => console.log(error));
-  };
-
   const handlePost = async () => {
+    let urlVideo
     if (selectedVideo !== []) {
-      Uploadvideo();
+      const fileName = "video-" + new Date().getTime();
+      const storage = getStorage();
+      const my_ref = ref(storage, `video/${fileName}.mp4`);
+      const video = await fetch(selectedVideo);
+      const bytes = await video.blob();
+      await uploadBytes(my_ref, bytes)
+        .then(async (res) => {
+          await getDownloadURL(my_ref)
+            .then((url) => {
+              urlVideo = url;
+              setSelectedVideo(url)
+            })
+            .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
     }
     let responseImage = [];
     for (let i = 0; i < selectedImages.length; i++) {
@@ -127,7 +125,7 @@ function AddPost({ navigation, route }) {
     const potion = {
       described: text,
       images: responseImage,
-      videos: selectedVideo,
+      videos: urlVideo,
     };
     return fetch("https://severfacebook.up.railway.app/api/v1/posts/create", {
       method: "POST",
