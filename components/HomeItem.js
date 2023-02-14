@@ -223,7 +223,12 @@ export default function HomeItem({
           Img.length === 0 ? (
             textContent.split(" ").length < 18 ? (
               <View style={styles.noImage}>
-                <Text style={styles.textNoImage}>{textContent}</Text>
+                <Text
+                  style={styles.textNoImage}
+                  numberOfLines={showMore ? 2 : 0}
+                  onPress={() => setShowMore(!showMore)}>
+                  {textContent}
+                </Text>
               </View>
             ) : (
               <View>
