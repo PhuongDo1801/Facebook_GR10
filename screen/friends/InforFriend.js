@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Layout from "../../components/Layout";
 import {
   Text,
   StyleSheet,
+  StatusBar,
   View,
   ImageBackground,
   ScrollView,
   Dimensions,
   Image,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -19,10 +20,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
-export default function Information({ navigation, route }) {
+export default function InforFriend({ navigation, route }) {
+  const { username, idUser, avatar, cover_image, text } = route.params;
   const [getInfor, setGetInfor] = useState({});
   const [getListPost, setGetListPost] = useState([]);
+  const [tokenn, setTokenn] = useState("");
 
   const showInfor = async () => {
     const token = await AsyncStorage.getItem("id_token");
@@ -45,7 +50,6 @@ export default function Information({ navigation, route }) {
       })
       .then((response) => {
         if (response !== undefined) {
-          showListPost(response.data._id);
           setGetInfor(response.data);
         }
       })
@@ -54,14 +58,52 @@ export default function Information({ navigation, route }) {
       });
   };
 
-  useEffect(() => {
-    showInfor();
-  }, [getListPost]);
-
-  const showListPost = async (iduser) => {
+  const blockFriend = async () => {
+    const values = {
+      user_id: idUser,
+      type: 1,
+    };
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/posts/list?userId=${iduser}`,
+      `https://severfacebook.up.railway.app/api/v1/users/set-block-diary`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          authorization: "token " + token,
+        },
+        body: JSON.stringify(values),
+      }
+    )
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert("Load lỗi");
+        }
+      })
+      .then((response) => {
+        if (response !== undefined) {
+          console.log(response);
+          alert(response.message);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    showListPost();
+    showInfor();
+  }, [navigation]);
+
+  const showListPost = async () => {
+    const token = await AsyncStorage.getItem("id_token");
+    return fetch(
+      `https://severfacebook.up.railway.app/api/v1/posts/list?userId=${idUser}`,
       {
         method: "GET",
         headers: {
@@ -82,6 +124,7 @@ export default function Information({ navigation, route }) {
       })
       .then((response) => {
         if (response !== undefined) {
+          setTokenn(token);
           setGetListPost(response.data);
         }
       })
@@ -89,62 +132,81 @@ export default function Information({ navigation, route }) {
         console.error(error);
       });
   };
-  // {
-  //   getListPost.map((Item, index) => {
-  //     console.log(Item);
-  //   });
-  // }
-  // console.log(getListPost);
 
   return (
-    <Layout route={route.name}>
-      <ScrollView style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Ionicons
+          name="arrow-back"
+          size={28}
+          color="black"
+          onPress={() => navigation.goBack()}
+        />
+        <View style={styles.buttonSearch}>
+          <TextInput
+            disabled={true}
+            placeholder="Tìm kiếm"
+            style={styles.textInput}
+          />
+          <AntDesign
+            name="search1"
+            size={18}
+            color="#888"
+            style={styles.iconSearch}
+          />
+        </View>
+      </View>
+      <ScrollView>
         <View style={styles.inforHeader}>
           <View style={styles.groupImage}>
             <ImageBackground
               source={{
-                uri: getInfor.cover_image,
+                uri: cover_image,
               }}
               style={styles.image}>
               <Image
                 source={{
-                  uri: getInfor.avatar,
+                  uri: avatar,
                 }}
                 style={styles.avatar}
-              />
-              <FontAwesome5
-                name="camera"
-                size={28}
-                color="black"
-                style={styles.camera}
               />
             </ImageBackground>
           </View>
           <View style={styles.inforContent}>
-            <Text style={styles.textFullName}>{getInfor.username}</Text>
-            <View>
-              <TouchableOpacity style={styles.buttonVideo}>
-                <EvilIcons name="plus" size={24} color="#fff" />
-                <Text style={styles.textButtonVideo}>Thêm vào tin</Text>
+            <Text style={styles.textFullName}>{username}</Text>
+            <View style={styles.button}>
+              <TouchableOpacity style={styles.buttonConfirm}>
+                <Text style={styles.textButtonVideo}>{text}</Text>
               </TouchableOpacity>
-              <View style={styles.itemProfile}>
-                <TouchableOpacity
-                  style={styles.editProfile}
-                  onPress={() =>
-                    navigation.navigate("ShowInfor", { getInfor: getInfor })
-                  }>
-                  <MaterialIcons name="edit" size={24} color="black" />
-                  <Text style={styles.textEditProfile}>
-                    Chỉnh sửa trang cá nhân
-                  </Text>
-                </TouchableOpacity>
-                <MaterialCommunityIcons
-                  name="dots-horizontal"
-                  size={24}
+              <TouchableOpacity
+                style={styles.buttonChat}
+                onPress={() =>
+                  navigation.navigate("Chat", {
+                    avatar: avatar,
+                    username: username,
+                    receiverId: idUser,
+                    senderId: getInfor._id,
+                    id_token: tokenn,
+                  })
+                }>
+                <FontAwesome5
+                  name="facebook-messenger"
+                  size={16}
                   color="black"
-                  style={styles.iconDot}
                 />
-              </View>
+                <Text style={styles.textEditProfile}>Nhắn tin</Text>
+              </TouchableOpacity>
+              {/* <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={24}
+                color="black"
+                style={styles.iconDot}
+              /> */}
+              <TouchableOpacity
+                style={styles.iconDot}
+                onPress={() => blockFriend()}>
+                <Text>Block</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -156,21 +218,21 @@ export default function Information({ navigation, route }) {
                 textContent={Item.described}
                 Img={Item.images}
                 idPost={Item._id}
-                idUser={getInfor._id}
-                countLikes={Item.like}
+                idUser={Item.author._id}
                 idAccount={getInfor._id}
-                countComments={Item.countComments}
+                countLikes={Item.like}
+                videos={Item.videos}
                 cover_image={Item.author.cover_image}
                 avatar={Item.author.avatar}
                 username={Item.author.username}
-                videos={Item.videos}
-                page="infor"
+                countComments={Item.countComments}
+                page="home"
               />
             </View>
           ))
           .reverse()}
       </ScrollView>
-    </Layout>
+    </View>
   );
 }
 
@@ -181,13 +243,40 @@ const margintop =
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: -0.5,
-    marginBottom: 130,
+    backgroundColor: "#ccc",
+    marginBottom: 80,
   },
+  header: {
+    paddingTop: StatusBar.currentHeight + 10,
+    backgroundColor: "#fff",
+    borderBottomColor: "#000",
+    borderBottomWidth: 0.5,
+    flexDirection: "row",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  buttonSearch: {
+    flex: 1,
+  },
+  textInput: {
+    backgroundColor: "#eee",
+    marginLeft: 10,
+    borderRadius: 30,
+    fontSize: 14,
+    paddingLeft: 35,
+  },
+  iconSearch: {
+    position: "absolute",
+    left: 20,
+    top: 5,
+  },
+  //body
   inforHeader: {
     backgroundColor: "#fff",
     marginBottom: 15,
     paddingBottom: 15,
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 0.5,
   },
   groupImage: {
     height: 0.2 * SCREEN_HEIGHT + 0.35 * SCREEN_WEIGHT,
@@ -205,14 +294,6 @@ const styles = StyleSheet.create({
     marginTop: margintop,
     position: "relative",
   },
-  camera: {
-    position: "absolute",
-    top: 0.3 * SCREEN_HEIGHT,
-    left: 0.35 * SCREEN_WEIGHT,
-    padding: 10,
-    borderRadius: 50,
-    backgroundColor: "#ccc",
-  },
   inforContent: {
     marginHorizontal: 10,
   },
@@ -221,36 +302,43 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 10,
   },
-  buttonVideo: {
+  button: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  buttonConfirm: {
     flexDirection: "row",
     backgroundColor: "#0066ff",
     paddingVertical: 8,
     borderRadius: 5,
     justifyContent: "center",
-    marginBottom: 10,
+    marginRight: 10,
+    width: (SCREEN_WEIGHT - 85) / 2,
   },
   textButtonVideo: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "500",
-    marginLeft: 5,
   },
   itemProfile: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
   },
-  editProfile: {
+  buttonChat: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
     backgroundColor: "#ccc",
     marginRight: 10,
     borderRadius: 5,
+    paddingVertical: 8,
+    width: (SCREEN_WEIGHT - 85) / 2,
   },
   textEditProfile: {
     marginLeft: 5,
     fontSize: 16,
+    fontWeight: "500",
   },
   iconDot: {
     paddingVertical: 8,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Layout from "../../components/Layout";
 import {
   Text,
@@ -11,103 +12,99 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-
+import { RefreshControl } from 'react-native';
 import { FontAwesome5 } from "@expo/vector-icons";
 import HomeItem from "../../components/HomeItem";
 
 function Home({ navigation, route }) {
-  const Items = [
-    {
-      name: "Trịnh Đạt",
-      time: 1,
-      content: {
-        text:
-          "Chào các bạn, Tôi là Trinh Đạt tôi xin giới thiệu với mọi " +
-          "người sơ qua về bản thân của mình như sau: Tôi là một người học " +
-          "giỏi, tôi rất tự tin về bản thân của mình, một người mà có thể " +
-          "nhìn thấy chuyển động của vạn vật, nghe được tiếng nghe của không" +
-          "gian và thời gian. Không nói điêu nhưng tôi là một người như thế " +
-          "một người có tầm sũy nghĩ quá lơn. Đã từng gần được thủ khoa vào ngành cntt này và hiện tại CPA đang là 3.9 " +
-          "Nói sơ qua về bản thân vậy thôi cảm ơn mọi người đã đọc",
-        Img: "https://demoda.vn/wp-content/uploads/2022/01/anh-wibu.jpg",
+  const [getInfor, setGetInfor] = useState([]);
+  const [getListPost, setGetListPost] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1500);
+  }, [refreshing]);
+  const showInfor = async () => {
+    const token = await AsyncStorage.getItem("id_token");
+    return fetch("https://severfacebook.up.railway.app/api/v1/users/show", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: "token " + token,
       },
-      avatar: "https://demoda.vn/wp-content/uploads/2022/01/anh-wibu.jpg",
-    },
+      body: JSON.stringify(),
+    })
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert("Load lỗi");
+        }
+      })
+      .then((response) => {
+        if (response !== undefined) {
+          setGetInfor(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-    {
-      name: "Phạm Đinh Minh",
-      time: 2,
-      content: {
-        text: "Chao một ngày mới bình yên nha",
-        Img: "https://gamek.mediacdn.vn/2019/10/20/photo-1-1571521922264714072244.jpg",
-      },
-      avatar:
-        "https://gamek.mediacdn.vn/2019/10/20/photo-1-1571521922264714072244.jpg",
-    },
+  useEffect(() => {
+    showInfor();
+    showListPost();
+    setTimeout(() => {
+      setCount(count + 1);
+    }, 5000);
+  }, [count]);
 
-    {
-      name: "Đỗ Đặng Phương",
-      time: 1.5,
-      content: {
-        text: "Chao một ngày mới bình yên nha",
-        Img: "https://i.ytimg.com/vi/dkvaprtP6L8/maxresdefault.jpg",
+  const showListPost = async () => {
+    const token = await AsyncStorage.getItem("id_token");
+    return fetch(`https://severfacebook.up.railway.app/api/v1/posts/list`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: "token " + token,
       },
-      avatar: "https://i.ytimg.com/vi/dkvaprtP6L8/maxresdefault.jpg",
-    },
-
-    {
-      name: "Hồ Đức Hân",
-      time: 2,
-      content: {
-        text: "Chao một ngày mới bình yên nha",
-        Img: "https://cdna.artstation.com/p/assets/images/images/019/387/690/large/inward-vertical-city.jpg?1563272711",
-      },
-      avatar:
-        "https://cdna.artstation.com/p/assets/images/images/019/387/690/large/inward-vertical-city.jpg?1563272711",
-    },
-
-    {
-      name: "Chiến Hoàng Văn",
-      time: 3,
-      content: {
-        text: "Chao một ngày mới bình yên nha",
-        Img: "https://www.ebtc.ie/wp-content/uploads/2017/10/bigstock-Autumn-Fall-scene-Beautiful-150998720.jpg",
-      },
-      avatar:
-        "https://www.ebtc.ie/wp-content/uploads/2017/10/bigstock-Autumn-Fall-scene-Beautiful-150998720.jpg",
-    },
-
-    {
-      name: "Vũ Bá Lượng",
-      time: 4,
-      content: {
-        text: "Chao một ngày mới bình yên nha",
-        Img: "https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg?r=1a0fc22192d0c808b8bb2b9bcfbf4a45b1793687",
-      },
-      avatar:
-        "https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg?r=1a0fc22192d0c808b8bb2b9bcfbf4a45b1793687",
-    },
-
-    {
-      name: "Lê Thị Giang",
-      time: 3,
-      content: {
-        text: "Chao một ngày mới bình yên nha oke bạn ơi !",
-        Img: null,
-      },
-      avatar:
-        "https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg?r=1a0fc22192d0c808b8bb2b9bcfbf4a45b1793687",
-    },
-  ];
+      body: JSON.stringify(),
+    })
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert("Dữ liệu thất bại");
+        }
+      })
+      .then((response) => {
+        if (response !== undefined) {
+          // console.log(response.data);
+          setGetListPost(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <Layout route={route.name}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} refreshControl={
+    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+  }>
         <View style={styles.infor}>
           <View style={styles.imageAvatar}>
             <Image
               source={{
-                uri: "https://i.ytimg.com/vi/JMisfp3ykM4/maxresdefault.jpg",
+                uri: getInfor.avatar,
               }}
               style={styles.avatar}
             />
@@ -115,23 +112,50 @@ function Home({ navigation, route }) {
           <View style={styles.search}>
             <TouchableOpacity
               style={styles.searchButton}
-              onPress={() => navigation.navigate("AddPost")}>
+              onPress={() =>
+                navigation.navigate("AddPost", {
+                  avatar: getInfor.avatar,
+                  username: getInfor.username,
+                })
+              }>
               <Text style={styles.textSearch}>Bạn đang nghĩ gì?</Text>
             </TouchableOpacity>
           </View>
-          <FontAwesome5 name="images" size={24} color="green" />
+          <FontAwesome5
+            name="images"
+            size={24}
+            color="green"
+            onPress={() =>
+              navigation.navigate("AddPost", {
+                avatar: getInfor.avatar,
+                username: getInfor.username,
+                textt: "camera",
+              })
+            }
+          />
         </View>
-        {Items.map((Item, index) => (
-          <View style={styles.body} key={index}>
-            <HomeItem
-              name={Item.name}
-              time={Item.time}
-              textContent={Item.content.text}
-              Img={Item.content.Img}
-              avatar={Item.avatar}
-            />
-          </View>
-        ))}
+        {getListPost
+          .map((Item, index) => (
+            <View style={styles.body} key={index}>
+              <HomeItem
+                time={Item.createdAt}
+                textContent={Item.described}
+                Img={Item.images}
+                idPost={Item._id}
+                idUser={Item.author._id}
+                cover_image={Item.author.cover_image}
+                avatar={Item.author.avatar}
+                username={Item.author.username}
+                idAccount={getInfor._id}
+                countComments={Item.countComments}
+                countLikes={Item.like}
+                liked={Item.isLike}
+                videos={Item.videos}
+                page="home"
+              />
+            </View>
+          ))
+          .reverse()}
       </ScrollView>
     </Layout>
   );

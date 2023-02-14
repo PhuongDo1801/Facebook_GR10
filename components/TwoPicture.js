@@ -5,8 +5,8 @@ import { StyleSheet, View, Image, Dimensions } from "react-native";
 export default function TwoPicture({ selectedImages }) {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: selectedImages[0].uri }} style={styles.picture1} />
-      <Image source={{ uri: selectedImages[1].uri }} style={styles.picture2} />
+      <Image source={{ uri: selectedImages[0] }} style={styles.picture1} />
+      <Image source={{ uri: selectedImages[1] }} style={styles.picture2} />
     </View>
   );
 }

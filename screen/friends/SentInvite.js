@@ -12,15 +12,14 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import FriendItem from "../../components/FriendItem";
-import Layout from "../../components/Layout";
 
-export default function SuggestionFriend({ route }) {
-  const [suggestFriend, setSuggestFriend] = useState([]);
+export default function SentInvite({ route }) {
+  const [sentInvite, setSentInvite] = useState([]);
   const navigation = useNavigation();
-  const getListFriend = async () => {
+  const getListSent = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      "https://severfacebook.up.railway.app/api/v1/friends/list/suggest",
+      "https://severfacebook.up.railway.app/api/v1/friends/list_requests",
       {
         method: "GET",
         headers: {
@@ -41,7 +40,7 @@ export default function SuggestionFriend({ route }) {
       })
       .then((response) => {
         if (response !== undefined) {
-          setSuggestFriend(response.data.listUserSuggest);
+          setSentInvite(response.data.sentList);
         }
       })
       .catch((error) => {
@@ -50,7 +49,7 @@ export default function SuggestionFriend({ route }) {
   };
 
   useEffect(() => {
-    getListFriend();
+    getListSent();
   }, [navigation]);
 
   return (
@@ -64,27 +63,28 @@ export default function SuggestionFriend({ route }) {
             onPress={() => navigation.goBack()}
           />
         </TouchableOpacity>
-        <Text style={styles.textHeader}>Gợi ý</Text>
+        <Text style={styles.textHeader}>Lời mời bạn đã gửi</Text>
       </View>
       <ScrollView style={styles.body}>
-        <View style={styles.invite}>
-          <Text style={styles.textInvite}>Những người bạn có thể biết</Text>
-        </View>
         <View style={styles.listFriend}>
           <ScrollView showsHorizontalScrollIndicator={false}>
-            {suggestFriend.map((ItemSuggestFriend, index) => (
-              <View style={styles.friend} key={index}>
-                <FriendItem
-                  cover_image={ItemSuggestFriend.cover_image}
-                  avatar={ItemSuggestFriend.avatar}
-                  mutual="1"
-                  username={ItemSuggestFriend.username}
-                  text={"Thêm bạn bè"}
-                  id={ItemSuggestFriend._id}
-                  time="{Item.time}"
-                />
-              </View>
-            ))}
+            {sentInvite.map((ItemSentInvite, index) =>
+              ItemSentInvite.receiver !== null ? (
+                <View style={styles.friend} key={index}>
+                  <FriendItem
+                    cover_image={ItemSentInvite.receiver.cover_image}
+                    avatar={ItemSentInvite.receiver.avatar}
+                    mutual="1"
+                    username={ItemSentInvite.receiver.username}
+                    text={"Đã gửi lời mời"}
+                    id={ItemSentInvite.receiver._id}
+                    time="{Item.time}"
+                  />
+                </View>
+              ) : (
+                ""
+              )
+            )}
           </ScrollView>
         </View>
       </ScrollView>
