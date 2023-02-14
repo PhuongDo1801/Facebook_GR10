@@ -162,13 +162,15 @@ export default function HomeItem({
           style={styles.ItemUser}
           onPress={() =>
             page === "home"
-              ? navigation.navigate("InforFriend", {
-                  avatar: avatar,
-                  idUser: idUser,
-                  username: username,
-                  cover_image: cover_image,
-                  text: "Bạn bè",
-                })
+              ? idUser === idAccount
+                ? navigation.navigate("Information")
+                : navigation.navigate("InforFriend", {
+                    avatar: avatar,
+                    idUser: idUser,
+                    username: username,
+                    cover_image: cover_image,
+                    text: "Bạn bè",
+                  })
               : ""
           }>
           <View style={styles.imageAvater}>
