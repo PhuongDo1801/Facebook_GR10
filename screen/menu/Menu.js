@@ -370,6 +370,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     alignItems: "center",
+    backgroundColor: "#ccc",
+    borderRadius: 1000,
+    marginRight: 10,
+    padding: 5,
+  },
+  profile: {
+    marginTop: -4,
+    flexDirection: "row",
+    width: "100%",
   },
   avt: {
     marginLeft: 10,
