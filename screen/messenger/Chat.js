@@ -37,12 +37,15 @@ const SocketClient = ({ route }) => {
         content: text,
       },
     ]);
-    socket.emit("chatmessage", {
-      senderId: senderId,
-      receiverId: receiverId,
-      content: text,
-      token: id_token,
-    });
+    if (text === "") {
+    } else {
+      socket.emit("chatmessage", {
+        senderId: senderId,
+        receiverId: receiverId,
+        content: text,
+        token: id_token,
+      });
+    }
   };
 
   const getChat = async () => {

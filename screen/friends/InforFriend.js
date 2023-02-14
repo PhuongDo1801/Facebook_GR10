@@ -61,10 +61,11 @@ export default function InforFriend({ navigation, route }) {
   const blockFriend = async () => {
     const values = {
       user_id: idUser,
+      type: 1,
     };
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/users/set-block-user`,
+      `https://severfacebook.up.railway.app/api/v1/users/set-block-diary`,
       {
         method: "POST",
         headers: {
