@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { Formik } from "formik";
 import {
@@ -18,34 +19,37 @@ export default function Login({ navigation }) {
 
   const handleLogin = async (values) => {
     // var token = await AsyncStorage.getItem("id_token");
-    return (
-      fetch("https://severfacebook.up.railway.app/api/v1/users/login", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          // authorization: "token " + token,
-        },
-        body: JSON.stringify(values),
+    return fetch("https://severfacebook.up.railway.app/api/v1/users/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        // authorization: "token " + token,
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert(
+            "Số điện thoại hoặc mật khẩu không chính xác\n " +
+              "Vui lòng đăng nhập lại"
+          );
+        }
       })
-        .then((response) => {
-          const statusCode = response.status;
-          if (statusCode === 200) {
-            navigation.replace("Home");
-          } else {
-            alert(
-              "Số điện thoại hoặc mật khẩu không chính xác\n " +
-                "Vui lòng đăng nhập lại"
-            );
-          }
-        })
-        // .then((data) => console.log(data))
-        // // return console.log(values);
-        .catch((error) => {
-          console.log(values);
-          console.error(error);
-        })
-    );
+      .then((response) => {
+        if (response !== undefined) {
+          AsyncStorage.setItem("id_token", response.token);
+          // console.log(AsyncStorage.getItem("AccessToken"));
+          // console.log(t);
+          navigation.replace("Home");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

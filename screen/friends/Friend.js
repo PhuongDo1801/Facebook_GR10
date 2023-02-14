@@ -1,8 +1,9 @@
-import React from "react";
-import { StatusBar } from "expo-status-bar";
+import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import {
   SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -11,156 +12,111 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import Friend from "../../components/FriendItem1";
+import FriendItem1 from "../../components/FriendItem1";
 
 export default function Friends({ route }) {
   const navigation = useNavigation();
-
-  const messengers = [
-    {
-      id: 1,
-      fullname: "Trinh Dat",
-      name: "Dat",
-      avatar: "https://reactnative.dev/img/tiny_logo.png",
-      mutual: 1,
-    },
-
-    {
-      id: 2,
-      fullname: "Pham Dinh Minh",
-      name: "Minh",
-      avatar:
-        "https://gamek.mediacdn.vn/2019/10/20/photo-1-1571521922264714072244.jpg",
-      mutual: 1,
-    },
-
-    {
-      id: 4,
-      fullname: "Do Dang Phuong",
-      name: "Phuong",
-      avatar: "https://i.ytimg.com/vi/dkvaprtP6L8/maxresdefault.jpg",
-      mutual: 3,
-    },
-
-    {
-      id: 5,
-      fullname: "Ho Duc Han",
-      name: "Han",
-      avatar:
-        "https://cdna.artstation.com/p/assets/images/images/019/387/690/large/inward-vertical-city.jpg?1563272711",
-      mutual: 20,
-    },
-
-    {
-      id: 6,
-      fullname: "Chien Hoang Van",
-      name: "Hoang",
-      avatar:
-        "https://www.ebtc.ie/wp-content/uploads/2017/10/bigstock-Autumn-Fall-scene-Beautiful-150998720.jpg",
-      mutual: 6,
-    },
-
-    {
-      id: 3,
-      fullname: "Vu Ba Luong",
-      name: "Luong",
-      avatar:
-        "https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg?r=1a0fc22192d0c808b8bb2b9bcfbf4a45b1793687",
-      mutual: 2,
-    },
-
-    {
-      id: 7,
-      fullname: "Le Thi Giang",
-      name: "Giang",
-      avatar:
-        "https://images.pexels.com/photos/301599/pexels-photo-301599.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      mutual: 5,
-    },
-  ];
-  const list1 = () => {
-    return messengers.map((element) => {
-      return (
-        <View style={styles.friend} key={element.id}>
-          <View>
-            <Friend
-              urlAvatar={element.avatar}
-              mutual={element.mutual}
-              name={element.fullname}></Friend>
-          </View>
-        </View>
-      );
-    });
+  const [friendInfor, setFriendInfor] = useState([]);
+  const getListFriend = async () => {
+    const token = await AsyncStorage.getItem("id_token");
+    return fetch("https://severfacebook.up.railway.app/api/v1/friends/list", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: "token " + token,
+      },
+      body: JSON.stringify(),
+    })
+      .then((response) => {
+        const statusCode = response.status;
+        if (statusCode === 200) {
+          return (response = response.json());
+        } else {
+          alert("Dữ liệu thất bại");
+        }
+      })
+      .then((response) => {
+        if (response !== undefined) {
+          setFriendInfor(response.data.friends);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+
+  useEffect(() => {
+    getListFriend();
+  }, [navigation]);
+
   return (
-      <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.buttonReturn}>
-            <Ionicons
-              name="arrow-back"
-              size={28}
-              color="black"
-              style={styles.iconReturn}
-              onPress={() => navigation.goBack()}
-            />
-          </TouchableOpacity>
-          <Text style={styles.textHeader}>Bạn bè</Text>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.buttonReturn}>
+          <Ionicons
+            name="arrow-back"
+            size={28}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>Bạn bè</Text>
+      </View>
+      <ScrollView style={styles.body}>
         <View style={styles.invite}>
-          <Text style={styles.textInvite}>7 Bạn bè</Text>
+          <Text style={styles.textInvite}>{friendInfor.length} bạn bè</Text>
         </View>
-        <View style={styles.lstFriend}>
+        <View style={styles.listFriend}>
           <ScrollView showsHorizontalScrollIndicator={false}>
-            {list1()}
+            {friendInfor.map((Friend, index) => (
+              <View style={styles.friend} key={index}>
+                <FriendItem1
+                  cover_image={Friend.cover_image}
+                  avatar={Friend.avatar}
+                  mutual="1"
+                  username={Friend.username}
+                  text={"Bạn bè"}
+                  id={Friend._id}
+                  time={Friend.createdAt}
+                />
+              </View>
+            ))}
           </ScrollView>
         </View>
       </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
-    paddingHorizontal: 10,
+    flex: 1,
   },
-
   header: {
+    borderBottomColor: "#000",
+    borderBottomWidth: 0.5,
     flexDirection: "row",
-    justifyContent: "flex-start",
-    paddingTop: "10%",
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
+    paddingVertical: 10,
+    marginHorizontal: 15,
   },
-
-  buttonReturn: {
-    paddingVertical: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
   textHeader: {
-    fontSize: 25,
-    fontWeight: "400",
-    marginLeft: "2%",
-    paddingLeft: "30%",
-    paddingTop: "1%",
+    marginLeft: 5,
+    fontSize: 18,
   },
-
+  //body
+  body: {
+    paddingHorizontal: 15,
+  },
   invite: {
-    paddingTop: "2%",
+    paddingTop: 15,
   },
-
   textInvite: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
-    marginLeft: "2%",
   },
-
-  lstFriend: {
-    paddingTop: 10,
-  },
-
   option: {
     flexDirection: "row",
     paddingBottom: 5,
