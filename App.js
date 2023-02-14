@@ -10,6 +10,7 @@ import Home from "./screen/home/Home";
 import Messenger from "./screen/messenger/Messenger";
 import Friend from "./screen/friends/Friend";
 import FriendInvite from "./screen/friends/FriendInvite";
+import SentInvite from "./screen/friends/SentInvite";
 import SuggestionFriend from "./screen/friends/SuggestionFriend";
 import Notification from "./screen/notification/Notification";
 import Information from "./screen/information/Information";
@@ -19,6 +20,7 @@ import AddPost from "./screen/posts/AddPost";
 import ShowInfor from "./screen/user/ShowInfor";
 import EditPost from "./screen/posts/EditPost";
 import InforFriend from "./screen/friends/InforFriend";
+import Chat from "./screen/messenger/Chat";
 import ChangePass from "./screen/menu/ChangePass";
 
 export default function App() {
@@ -34,6 +36,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Friend" component={Friend} />
         <Stack.Screen name="FriendInvite" component={FriendInvite} />
+        <Stack.Screen name="SentInvite" component={SentInvite} />
         <Stack.Screen name="SuggestionFriend" component={SuggestionFriend} />
         <Stack.Screen name="Layout" component={Layout} />
         <Stack.Screen name="Notification" component={Notification} />
@@ -44,6 +47,7 @@ export default function App() {
         <Stack.Screen name="ShowInfor" component={ShowInfor} />
         <Stack.Screen name="EditPost" component={EditPost} />
         <Stack.Screen name="InforFriend" component={InforFriend} />
+        <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="ChangePass" component={ChangePass} />
       </Stack.Navigator>
       <StatusBar style="auto" />

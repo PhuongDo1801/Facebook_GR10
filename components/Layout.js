@@ -148,7 +148,7 @@ export default function Layout({ children, route }) {
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 
-const marginy = SCREEN_HEIGHT > 750 ? 3.5 : 0;
+const marginy = SCREEN_HEIGHT > 800 ? 3.5 : SCREEN_HEIGHT > 750 ? 0.75 : 0;
 
 const styles = StyleSheet.create({
   container: {
