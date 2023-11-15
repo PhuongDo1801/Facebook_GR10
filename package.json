@@ -4,7 +4,7 @@
    "description": "restful-api-cafe_do_an_thiet_ke_cnpm",
   "main": "index.js",
   "engines": {
-    "node": "14.x"
+    "node": "18.x"
   },
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
