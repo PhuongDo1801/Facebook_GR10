@@ -20,7 +20,7 @@ export default function Friend({
     };
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      "https://severfacebook.up.railway.app/api/v1/friends/set-remove ",
+      "https://sever-facebook.vercel.app/api/v1/friends/set-remove ",
       {
         method: "POST",
         headers: {

@@ -128,7 +128,7 @@ function ShowInfor({ navigation, route }) {
       avatar: avatarx,
       cover_image: coverAvatarx,
     };
-    return fetch("https://severfacebook.up.railway.app/api/v1/users/edit", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/users/edit", {
       method: "POST",
       headers: {
         Accept: "application/json",

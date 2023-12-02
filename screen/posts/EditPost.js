@@ -26,18 +26,15 @@ function EditPost({ navigation, route }) {
     values = {
       described: text,
     };
-    return fetch(
-      `https://severfacebook.up.railway.app/api/v1/posts/edit/${id}`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          authorization: "token " + token,
-        },
-        body: JSON.stringify(values),
-      }
-    )
+    return fetch(`https://sever-facebook.vercel.app/api/v1/posts/edit/${id}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        authorization: "token " + token,
+      },
+      body: JSON.stringify(values),
+    })
       .then((response) => {
         const statusCode = response.status;
         if (statusCode === 200) {

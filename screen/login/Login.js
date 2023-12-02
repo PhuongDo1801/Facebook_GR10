@@ -19,7 +19,7 @@ export default function Login({ navigation }) {
 
   const handleLogin = async (values) => {
     // var token = await AsyncStorage.getItem("id_token");
-    return fetch("https://severfacebook.up.railway.app/api/v1/users/login", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/users/login", {
       method: "POST",
       headers: {
         Accept: "application/json",

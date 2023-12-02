@@ -34,7 +34,7 @@ export default function CommentPost({
     };
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/postComment/create/${id}`,
+      `https://sever-facebook.vercel.app/api/v1/postComment/create/${id}`,
       {
         method: "POST",
         headers: {
@@ -61,7 +61,7 @@ export default function CommentPost({
   const getCommentPost = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/postComment/list/${id}`,
+      `https://sever-facebook.vercel.app/api/v1/postComment/list/${id}`,
       {
         method: "GET",
         headers: {

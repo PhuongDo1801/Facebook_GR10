@@ -20,7 +20,7 @@ export default function SuggestionFriend({ route }) {
   const getListFriend = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      "https://severfacebook.up.railway.app/api/v1/friends/list/suggest",
+      "https://sever-facebook.vercel.app/api/v1/friends/list/suggest",
       {
         method: "GET",
         headers: {

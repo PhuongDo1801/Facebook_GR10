@@ -21,7 +21,7 @@ export default function DeletePost({
   const deletePost = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/posts/delete/${idPost}`,
+      `https://sever-facebook.vercel.app/api/v1/posts/delete/${idPost}`,
       {
         method: "GET",
         headers: {

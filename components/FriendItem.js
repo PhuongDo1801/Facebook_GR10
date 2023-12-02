@@ -24,7 +24,7 @@ export default function FriendItem({
   const check = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/friends/status/${id}`,
+      `https://sever-facebook.vercel.app/api/v1/friends/status/${id}`,
       {
         method: "GET",
         headers: {
@@ -64,7 +64,7 @@ export default function FriendItem({
     };
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      "https://severfacebook.up.railway.app/api/v1/friends/set-accept",
+      "https://sever-facebook.vercel.app/api/v1/friends/set-accept",
       {
         method: "POST",
         headers: {
@@ -94,7 +94,7 @@ export default function FriendItem({
     };
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      "https://severfacebook.up.railway.app/api/v1/friends/set-request-friend ",
+      "https://sever-facebook.vercel.app/api/v1/friends/set-request-friend ",
       {
         method: "POST",
         headers: {

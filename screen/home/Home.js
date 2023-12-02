@@ -12,7 +12,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { RefreshControl } from 'react-native';
+import { RefreshControl } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import HomeItem from "../../components/HomeItem";
 
@@ -30,7 +30,7 @@ function Home({ navigation, route }) {
   }, [refreshing]);
   const showInfor = async () => {
     const token = await AsyncStorage.getItem("id_token");
-    return fetch("https://severfacebook.up.railway.app/api/v1/users/show", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/users/show", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -67,7 +67,7 @@ function Home({ navigation, route }) {
 
   const showListPost = async () => {
     const token = await AsyncStorage.getItem("id_token");
-    return fetch(`https://severfacebook.up.railway.app/api/v1/posts/list`, {
+    return fetch(`https://sever-facebook.vercel.app/api/v1/posts/list`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -97,9 +97,11 @@ function Home({ navigation, route }) {
 
   return (
     <Layout route={route.name}>
-      <ScrollView style={styles.container} refreshControl={
-    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-  }>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.infor}>
           <View style={styles.imageAvatar}>
             <Image

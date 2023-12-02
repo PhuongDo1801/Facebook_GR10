@@ -47,7 +47,7 @@ export default function Register({ navigation, route }) {
       password: values.password,
     };
     // var token = await AsyncStorage.getItem("id_token");
-    return fetch("https://severfacebook.up.railway.app/api/v1/users/register", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/users/register", {
       method: "POST",
       headers: {
         Accept: "application/json",

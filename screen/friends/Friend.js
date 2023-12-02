@@ -19,7 +19,7 @@ export default function Friends({ route }) {
   const [friendInfor, setFriendInfor] = useState([]);
   const getListFriend = async () => {
     const token = await AsyncStorage.getItem("id_token");
-    return fetch("https://severfacebook.up.railway.app/api/v1/friends/list", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/friends/list", {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -26,7 +26,7 @@ export default function Information({ navigation, route }) {
 
   const showInfor = async () => {
     const token = await AsyncStorage.getItem("id_token");
-    return fetch("https://severfacebook.up.railway.app/api/v1/users/show", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/users/show", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -63,7 +63,7 @@ export default function Information({ navigation, route }) {
         newPassword: newPassword,
       };
       return fetch(
-        "https://severfacebook.up.railway.app/api/v1/users/change-password",
+        "https://sever-facebook.vercel.app/api/v1/users/change-password",
         {
           method: "POST",
           headers: {

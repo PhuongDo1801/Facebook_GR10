@@ -31,7 +31,7 @@ export default function InforFriend({ navigation, route }) {
 
   const showInfor = async () => {
     const token = await AsyncStorage.getItem("id_token");
-    return fetch("https://severfacebook.up.railway.app/api/v1/users/show", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/users/show", {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -65,7 +65,7 @@ export default function InforFriend({ navigation, route }) {
     };
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/users/set-block-diary`,
+      `https://sever-facebook.vercel.app/api/v1/users/set-block-diary`,
       {
         method: "POST",
         headers: {
@@ -103,7 +103,7 @@ export default function InforFriend({ navigation, route }) {
   const showListPost = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1/posts/list?userId=${idUser}`,
+      `https://sever-facebook.vercel.app/api/v1/posts/list?userId=${idUser}`,
       {
         method: "GET",
         headers: {

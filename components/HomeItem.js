@@ -51,7 +51,7 @@ export default function HomeItem({
   const handleLikePost = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      `https://severfacebook.up.railway.app/api/v1//postLike/action/${idPost}`,
+      `https://sever-facebook.vercel.app/api/v1//postLike/action/${idPost}`,
       {
         method: "POST",
         headers: {

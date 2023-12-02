@@ -20,7 +20,7 @@ export default function FriendInvite({ route }) {
   const getListFriendInvite = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      "https://severfacebook.up.railway.app/api/v1/friends/get-requested-friend",
+      "https://sever-facebook.vercel.app/api/v1/friends/get-requested-friend",
       {
         method: "POST",
         headers: {

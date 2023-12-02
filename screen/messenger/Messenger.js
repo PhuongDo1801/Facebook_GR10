@@ -19,7 +19,7 @@ export default function Messenger({ navigation }) {
 
   const getListFriend = async () => {
     const token = await AsyncStorage.getItem("id_token");
-    return fetch("https://severfacebook.up.railway.app/api/v1/friends/list", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/friends/list", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -49,7 +49,7 @@ export default function Messenger({ navigation }) {
   const showInfor = async () => {
     const token = await AsyncStorage.getItem("id_token");
     setTokenn(token);
-    return fetch("https://severfacebook.up.railway.app/api/v1/users/show", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/users/show", {
       method: "GET",
       headers: {
         Accept: "application/json",

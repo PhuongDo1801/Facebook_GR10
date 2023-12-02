@@ -19,7 +19,7 @@ export default function SentInvite({ route }) {
   const getListSent = async () => {
     const token = await AsyncStorage.getItem("id_token");
     return fetch(
-      "https://severfacebook.up.railway.app/api/v1/friends/list_requests",
+      "https://sever-facebook.vercel.app/api/v1/friends/list_requests",
       {
         method: "GET",
         headers: {

@@ -133,7 +133,7 @@ function AddPost({ navigation, route }) {
       images: responseImage,
       videos: urlVideo,
     };
-    return fetch("https://severfacebook.up.railway.app/api/v1/posts/create", {
+    return fetch("https://sever-facebook.vercel.app/api/v1/posts/create", {
       method: "POST",
       headers: {
         Accept: "application/json",

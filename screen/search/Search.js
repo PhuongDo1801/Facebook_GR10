@@ -28,7 +28,7 @@ export default function Search({ navigation }) {
 
   const fetchPosts = async () => {
     const token = await AsyncStorage.getItem("id_token");
-    return fetch(`https://severfacebook.up.railway.app/api/v1/search/${text}`, {
+    return fetch(`https://sever-facebook.vercel.app/api/v1/search/${text}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
